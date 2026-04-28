@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>니모 부동산 데이터 분석 대시보드</title>
+    <title>nemo 부동산 데이터 분석 대시보드</title>
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- Scripts -->
+    <script src="data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -297,8 +298,8 @@
     <div class="container">
         <header>
             <div class="header-title">
-                <h1>니모 부동산 분석</h1>
-                <p>니모 스토어 상권 데이터 분석 대시보드 • 강남 지역</p>
+                <h1>nemo 부동산 분석</h1>
+                <p>nemo 스토어 상권 데이터 분석 대시보드 • 강남 지역</p>
             </div>
             <div class="header-action">
                 <span class="tag">마지막 업데이트: 2026.04.28</span>
@@ -429,22 +430,7 @@
         // Init Lucide Icons
         lucide.createIcons();
 
-        // Data for Explorer
-        const allStores = [
-            {title: "신논현역 초역세권 고깃집", dep: 40000, rent: 6700, prem: 180000, size: 66.12, views: 988},
-            {title: "역삼동 위치조건 뛰어난 카페", dep: 10000, rent: 1000, prem: 30000, size: 19.83, views: 956},
-            {title: "인테리어 완비된 역삼동 고깃집", dep: 180000, rent: 14000, prem: 300000, size: 115.7, views: 956},
-            {title: "강남역 점프 밀라노 방탈출 매장", dep: 40000, rent: 3800, prem: 130000, size: 115.17, views: 943},
-            {title: "접근성 좋은 서초동 파티룸", dep: 10000, rent: 1350, prem: 5000, size: 38.81, views: 940},
-            {title: "테라스 돋보이는 깔끔한 상가", dep: 60000, rent: 5000, prem: 20000, size: 109.09, views: 925},
-            {title: "역삼역 인근 대형 사무실", dep: 200000, rent: 18000, prem: 0, size: 250.5, views: 880},
-            {title: "서초동 조용한 스터디 카페", dep: 5000, rent: 250, prem: 10000, size: 45.2, views: 850},
-            {title: "강남역 인근 루프탑 와인바", dep: 80000, rent: 4500, prem: 50000, size: 82.3, views: 720},
-            {title: "테헤란로 대로변 오피스", dep: 150000, rent: 12000, prem: 0, size: 145.8, views: 650},
-            {title: "논현동 먹자골목 이자카야", dep: 30000, rent: 280, prem: 8000, size: 55.4, views: 610},
-            {title: "청담동 분위기 좋은 바 자리", dep: 10000, rent: 800, prem: 15000, size: 33.1, views: 590}
-        ];
-
+        // Data for Explorer (Loaded from data.js)
         let filteredData = [...allStores];
         let currentPage = 1;
         let pageSize = 10;
