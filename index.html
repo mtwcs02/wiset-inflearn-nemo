@@ -3,12 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nemo 부동산 데이터 분석 대시보드</title>
-    <!-- Typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Scripts -->
+    <title>nemo 부동산 분석 대시보드</title>
     <script src="data.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,391 +24,254 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
-        
-        :root {
-            --bg-color: #0F1115;
-            --card-bg: #1A1D24;
-            --accent-color: #10B981;
-            --text-primary: #F3F4F6;
-            --text-secondary: #9CA3AF;
-            --border-color: #2D333F;
-        }
-
-        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--text-primary); }
+        body { font-family: 'Pretendard', sans-serif; background-color: #0F1115; color: #F3F4F6; }
         .glass-card { background: rgba(26, 29, 36, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0F1115; }
-        ::-webkit-scrollbar-thumb { background: #2D333F; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #10B981; }
-
-        .sort-icon::after { content: '↕'; margin-left: 5px; font-size: 0.8rem; opacity: 0.5; }
+        .num-align { font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
         .animate { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-
-        /* Fixed Width Numbers for Table */
-        .num-align {
-            font-family: 'Pretendard', sans-serif;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -0.5px;
-        }
     </style>
 </head>
 <body class="p-4 md:p-8">
     <div class="max-w-[1440px] mx-auto">
-        <header class="flex justify-between items-center mb-8 pb-4 border-b border-border">
-            <div class="header-title">
-                <h1 class="text-4xl font-extrabold tracking-tighter bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">nemo 부동산 분석</h1>
-                <p class="text-gray-400 text-sm mt-1">nemo 스토어 상권 데이터 분석 대시보드 • 강남 지역</p>
+        <header class="flex justify-between items-center mb-10 pb-4 border-b border-border">
+            <div>
+                <h1 class="text-4xl font-black bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">nemo 분석</h1>
+                <p class="text-gray-400 text-sm mt-1">강남 상권 매물 673건 실시간 데이터 분석</p>
             </div>
-            <div class="hidden md:block">
-                <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-xs font-bold uppercase tracking-wider">Live Analysis</span>
+            <div class="hidden md:flex gap-2">
+                <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-[10px] font-bold uppercase tracking-widest">Live Analysis</span>
+                <span class="px-3 py-1 bg-white/5 text-gray-400 rounded-full text-[10px] font-bold uppercase tracking-widest" id="lastUpdated"></span>
             </div>
         </header>
 
-        <!-- 핵심 요약 카드 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-1 relative overflow-hidden group">
-                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">총 매물 수</div>
-                <div class="stat-value text-3xl font-black text-white" id="totalStores">0</div>
-                <div class="mt-2 text-accent text-xs flex items-center gap-1">
-                    <i data-lucide="trending-up" class="w-3 h-3"></i> 시장 공급 충분
-                </div>
-                <i data-lucide="store" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
+        <!-- 핵심 요약 카드 (5개) -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div class="stat-card glass-card p-5 rounded-2xl animate" style="animation-delay: 0.1s">
+                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">총 매물 수</div>
+                <div class="text-2xl font-black" id="totalStores">0</div>
+                <div class="mt-1 text-[10px] text-accent">공급 현황 정상</div>
             </div>
-            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-2 relative overflow-hidden group">
-                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">평균 평당 임대료</div>
-                <div class="stat-value text-3xl font-black text-white" id="avgRentPerArea">0<span class="text-sm font-normal text-gray-500 ml-1">만원</span></div>
-                <div class="mt-2 text-gray-400 text-xs">평당 평균 임대료 지수</div>
-                <i data-lucide="bar-chart-3" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
+            <div class="stat-card glass-card p-5 rounded-2xl animate" style="animation-delay: 0.2s">
+                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">평균 평당 월세</div>
+                <div class="text-2xl font-black" id="avgRentPy">0<span class="text-xs font-normal text-gray-600 ml-1">만</span></div>
+                <div class="mt-1 text-[10px] text-gray-500">강남구 평균 지표</div>
             </div>
-            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-3 relative overflow-hidden group">
-                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">가성비 꿀매물</div>
-                <div class="stat-value text-3xl font-black text-white" id="bestValueCount">0<span class="text-sm font-normal text-gray-500 ml-1">개</span></div>
-                <div class="mt-2 text-yellow-400 text-xs flex items-center gap-1">
-                    <i data-lucide="zap" class="w-3 h-3"></i> 평균가 70% 이하 매물
-                </div>
-                <i data-lucide="award" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
+            <div class="stat-card glass-card p-5 rounded-2xl animate" style="animation-delay: 0.3s">
+                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">가성비 꿀매물</div>
+                <div class="text-2xl font-black" id="bestValue">0<span class="text-xs font-normal text-gray-600 ml-1">건</span></div>
+                <div class="mt-1 text-[10px] text-yellow-500">평균가 70% 이하</div>
             </div>
-            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-4 relative overflow-hidden group">
-                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">인기 급상승</div>
-                <div class="stat-value text-3xl font-black text-white" id="trendingCount">0<span class="text-sm font-normal text-gray-500 ml-1">개</span></div>
-                <div class="mt-2 text-blue-400 text-xs">상위 5% 조회수 매물</div>
-                <i data-lucide="eye" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
+            <div class="stat-card glass-card p-5 rounded-2xl animate" style="animation-delay: 0.4s">
+                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">인기 급상승</div>
+                <div class="text-2xl font-black" id="trending">0<span class="text-xs font-normal text-gray-600 ml-1">건</span></div>
+                <div class="mt-1 text-[10px] text-blue-400">조회수 상위 5%</div>
+            </div>
+            <div class="stat-card glass-card p-5 rounded-2xl animate" style="animation-delay: 0.5s">
+                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">역세권 비율</div>
+                <div class="text-2xl font-black" id="subwayRate">0<span class="text-xs font-normal text-gray-600 ml-1">%</span></div>
+                <div class="mt-1 text-[10px] text-purple-400">역 300m 이내 추정</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-12 gap-8 mb-10">
-            <!-- 1. 임대료 vs 면적 산점도 (가성비 분석) -->
-            <div class="col-span-12 lg:col-span-8 glass-card p-8 rounded-3xl border border-border animate delay-1">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold flex items-center gap-2"><i data-lucide="scatter-chart" class="text-accent"></i> 임대료 vs 면적 상관관계 (가성비 분석)</h2>
-                    <span class="text-xs text-gray-500">좌측 하단일수록 가성비 높음</span>
-                </div>
-                <div class="h-[400px] w-full">
-                    <canvas id="scatterChart"></canvas>
-                </div>
+        <div class="grid grid-cols-12 gap-6 mb-8">
+            <!-- 시각화 영역 -->
+            <div class="col-span-12 lg:col-span-8 glass-card p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-2"><i data-lucide="scatter-chart" class="w-5 h-5 text-accent"></i> 임대료 vs 면적 상관관계</h2>
+                <div class="h-[400px]"><canvas id="scatterChart"></canvas></div>
             </div>
-
-            <!-- 2. 업종별 분포 (Doughnut) -->
-            <div class="col-span-12 lg:col-span-4 glass-card p-8 rounded-3xl border border-border animate delay-2">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="pie-chart" class="text-accent"></i> 업종별 분포</h2>
-                <div class="h-[300px] w-full">
-                    <canvas id="industryChart"></canvas>
-                </div>
+            <div class="col-span-12 lg:col-span-4 glass-card p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-2"><i data-lucide="pie-chart" class="w-5 h-5 text-accent"></i> 업종별 분포</h2>
+                <div class="h-[400px]"><canvas id="industryChart"></canvas></div>
             </div>
-
-            <!-- 3. 보증금 분포 (Histogram) -->
-            <div class="col-span-12 lg:col-span-6 glass-card p-8 rounded-3xl border border-border animate delay-3">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="bar-chart" class="text-accent"></i> 보증금 가격대 분포</h2>
-                <div class="h-[300px] w-full">
-                    <canvas id="depositHistChart"></canvas>
-                </div>
+            
+            <div class="col-span-12 lg:col-span-4 glass-card p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-2"><i data-lucide="bar-chart" class="w-5 h-5 text-accent"></i> 보증금 구간 분포</h2>
+                <div class="h-[250px]"><canvas id="depHist"></canvas></div>
             </div>
-
-            <!-- 4. 층별 매물 분포 (Bar) -->
-            <div class="col-span-12 lg:col-span-6 glass-card p-8 rounded-3xl border border-border animate delay-4">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="layers" class="text-accent"></i> 층별 매물 분포</h2>
-                <div class="h-[300px] w-full">
-                    <canvas id="floorChart"></canvas>
-                </div>
+            <div class="col-span-12 lg:col-span-4 glass-card p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-5 h-5 text-accent"></i> 월세 구간 분포</h2>
+                <div class="h-[250px]"><canvas id="rentHist"></canvas></div>
+            </div>
+            <div class="col-span-12 lg:col-span-4 glass-card p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-2"><i data-lucide="layers" class="w-5 h-5 text-accent"></i> 층별 분포</h2>
+                <div class="h-[250px]"><canvas id="floorChart"></canvas></div>
             </div>
         </div>
 
-        <!-- 데이터 익스플로러 -->
-        <div class="glass-card p-8 rounded-3xl border border-border animate delay-4 mb-10">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-1.5 h-8 bg-accent rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
-                    <h2 class="text-2xl font-black tracking-tight">데이터 익스플로러</h2>
-                </div>
-                <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
-                    <div class="relative flex-1 md:flex-none">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
-                        <input type="text" id="tableSearch" placeholder="매물 명칭 검색..." 
-                            class="bg-[#0F1115] border border-border rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-accent w-full transition-all">
-                    </div>
-                    <select id="pageSizeSelect" class="bg-[#0F1115] border border-border rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-accent transition-all">
-                        <option value="5">5개씩</option>
-                        <option value="10" selected>10개씩</option>
-                        <option value="20">20개씩</option>
-                        <option value="50">50개씩</option>
+        <!-- 테이블 영역 -->
+        <div class="glass-card p-8 rounded-3xl mb-10">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                <h2 class="text-2xl font-black">데이터 익스플로러</h2>
+                <div class="flex gap-4 w-full md:w-auto">
+                    <input type="text" id="search" placeholder="매물 검색..." class="bg-dark border border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-accent flex-1 md:w-64">
+                    <select id="pageSize" class="bg-dark border border-border rounded-xl px-4 py-2 text-sm">
+                        <option value="10">10개</option>
+                        <option value="20">20개</option>
+                        <option value="50">50개</option>
                     </select>
                 </div>
             </div>
-
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full text-left">
                     <thead>
-                        <tr class="text-gray-500 border-b border-border text-xs uppercase tracking-widest font-bold">
-                            <th class="p-5 w-16">번호</th>
-                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon" onclick="sortTable('title')">매물 명칭</th>
-                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('dep')">보증금</th>
-                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rent')">월세</th>
-                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rentPerArea')">평당 월세</th>
-                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('size')">면적(㎡)</th>
-                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('views')">조회수</th>
+                        <tr class="text-gray-500 text-[10px] uppercase font-bold border-b border-border">
+                            <th class="p-4">#</th>
+                            <th class="p-4">매물 명칭</th>
+                            <th class="p-4 text-right">보증금</th>
+                            <th class="p-4 text-right">월세</th>
+                            <th class="p-4 text-right">평당월세</th>
+                            <th class="p-4 text-right">면적(㎡)</th>
+                            <th class="p-4 text-right">조회수</th>
                         </tr>
                     </thead>
-                    <tbody id="dataTableBody" class="text-sm">
-                        <!-- JS로 채워짐 -->
-                    </tbody>
+                    <tbody id="tableBody"></tbody>
                 </table>
             </div>
-
-            <div class="flex flex-col md:flex-row justify-between items-center mt-10 gap-6">
-                <div class="text-sm text-gray-500 font-medium" id="tableInfo">결과: 0 - 0 / 0</div>
-                <div class="flex items-center gap-3" id="paginationControls"></div>
+            <div class="flex justify-between items-center mt-8">
+                <div id="tableInfo" class="text-xs text-gray-500"></div>
+                <div id="pagination" class="flex gap-2"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // 1. Data Processing
-        const processedData = allStores.map(s => {
-            const sizeInPy = s.size / 3.305;
-            const rentPerPy = s.rent / sizeInPy;
-            return {
-                ...s,
-                rentPerArea: Math.round(rentPerPy), // 평당 월세
-            };
-        });
+        const processedData = allStores.map(s => ({
+            ...s,
+            rentPy: Math.round(s.rent / (s.size / 3.305)),
+            isSubway: /역|역세권|출구|도보/.test(s.title)
+        }));
 
-        // 2. Global State
-        let filteredData = [...processedData];
-        let currentPage = 1;
-        let pageSize = 10;
-        let sortKey = 'views';
-        let sortOrder = 'desc';
+        let filtered = [...processedData];
+        let page = 1;
+        let size = 10;
 
-        // 3. Stats Calculation (REAL-TIME)
-        function updateStats() {
+        function updateUI() {
+            // Stats
             const total = processedData.length;
+            const avg = Math.round(processedData.reduce((a,b)=>a+b.rentPy, 0)/total);
+            const best = processedData.filter(s=>s.rentPy < avg * 0.7).length;
+            const topViews = [...processedData].sort((a,b)=>b.views-a.views)[Math.floor(total*0.05)].views;
+            const trend = processedData.filter(s=>s.views >= topViews).length;
+            const sub = ((processedData.filter(s=>s.isSubway).length / total)*100).toFixed(1);
+
             document.getElementById('totalStores').innerText = total.toLocaleString();
+            document.getElementById('avgRentPy').innerText = avg.toLocaleString();
+            document.getElementById('bestValue').innerText = best.toLocaleString();
+            document.getElementById('trending').innerText = trend.toLocaleString();
+            document.getElementById('subwayRate').innerText = sub;
+
+            // Table
+            const start = (page-1)*size;
+            const end = start + size;
+            const pData = filtered.slice(start, end);
+            const body = document.getElementById('tableBody');
+            body.innerHTML = pData.map((s,i)=>`
+                <tr class="border-b border-border/50 hover:bg-white/[0.02] transition-colors group">
+                    <td class="p-4 text-gray-600 text-xs num-align">${start+i+1}</td>
+                    <td class="p-4 font-bold text-white/90">${s.title}</td>
+                    <td class="p-4 text-right num-align">${s.dep.toLocaleString()}</td>
+                    <td class="p-4 text-right num-align">${s.rent.toLocaleString()}</td>
+                    <td class="p-4 text-right"><span class="px-2 py-0.5 rounded text-xs num-align ${s.rentPy < avg*0.7 ? 'bg-accent/10 text-accent' : 'text-gray-500'}">${s.rentPy.toLocaleString()}</span></td>
+                    <td class="p-4 text-right num-align text-gray-500">${s.size.toFixed(1)}</td>
+                    <td class="p-4 text-right num-align text-white/20 group-hover:text-white/50">${s.views.toLocaleString()}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('tableInfo').innerText = `Displaying ${start+1}-${Math.min(end, filtered.length)} of ${filtered.length}`;
             
-            const totalRentPerArea = processedData.reduce((acc, cur) => acc + cur.rentPerArea, 0);
-            const avgRent = totalRentPerArea / total;
-            document.getElementById('avgRentPerArea').innerText = Math.round(avgRent).toLocaleString();
-            
-            // Best Value: Avg Rent * 0.7 이하
-            const bestValue = processedData.filter(s => s.rentPerArea < avgRent * 0.7).length;
-            document.getElementById('bestValueCount').innerText = bestValue.toLocaleString();
-            
-            // Trending: Top 5% by Views
-            const sortedViews = [...processedData].sort((a,b) => b.views - a.views);
-            const threshold = sortedViews[Math.floor(total * 0.05)].views;
-            const trending = processedData.filter(s => s.views >= threshold).length;
-            document.getElementById('trendingCount').innerText = trending.toLocaleString();
+            // Pagination
+            const totalPages = Math.ceil(filtered.length / size);
+            const pagin = document.getElementById('pagination');
+            pagin.innerHTML = '';
+            for(let i=Math.max(1, page-2); i<=Math.min(totalPages, page+2); i++) {
+                const b = document.createElement('button');
+                b.innerText = i;
+                b.className = `w-8 h-8 rounded-lg text-xs ${i===page ? 'bg-accent text-white font-bold' : 'text-gray-500 hover:bg-white/10'}`;
+                b.onclick = () => { page=i; updateUI(); };
+                pagin.appendChild(b);
+            }
         }
 
-        // 4. Table Rendering
-        function renderTable() {
-            const tableBody = document.getElementById('dataTableBody');
-            const start = (currentPage - 1) * pageSize;
-            const end = start + pageSize;
-            const pageData = filteredData.slice(start, end);
-
-            tableBody.innerHTML = '';
-            pageData.forEach((s, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-border hover:bg-white/[0.03] transition-colors group';
-                tr.innerHTML = `
-                    <td class="p-5 text-gray-600 num-align text-xs">${start + index + 1}</td>
-                    <td class="p-5 font-semibold text-white group-hover:text-accent transition-colors">${s.title}</td>
-                    <td class="p-5 text-right num-align">${s.dep.toLocaleString()}</td>
-                    <td class="p-5 text-right num-align text-white">${s.rent.toLocaleString()}</td>
-                    <td class="p-5 text-right">
-                        <span class="px-2 py-1 rounded-md ${s.rentPerArea < 15 ? 'bg-accent/10 text-accent' : 'text-gray-400'} num-align">
-                            ${s.rentPerArea.toLocaleString()}
-                        </span>
-                    </td>
-                    <td class="p-5 text-right num-align text-gray-400">${s.size.toFixed(1)}</td>
-                    <td class="p-5 text-right num-align text-blue-500 font-bold">${s.views.toLocaleString()}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
-
-            document.getElementById('tableInfo').innerText = `결과: ${filteredData.length > 0 ? start + 1 : 0} - ${Math.min(end, filteredData.length)} / ${filteredData.length}`;
-            renderPagination();
-        }
-
-        // 5. Pagination Logic
-        function renderPagination() {
-            const container = document.getElementById('paginationControls');
-            const totalPages = Math.ceil(filteredData.length / pageSize);
-            container.innerHTML = '';
-            if (totalPages <= 1) return;
-
-            const addBtn = (content, onClick, active = false, disabled = false) => {
-                const btn = document.createElement('button');
-                btn.innerHTML = content;
-                btn.disabled = disabled;
-                btn.className = active 
-                    ? 'w-10 h-10 rounded-xl bg-accent text-white font-bold shadow-lg shadow-accent/20 flex items-center justify-center transition-all'
-                    : disabled ? 'w-10 h-10 rounded-xl text-gray-700 cursor-not-allowed flex items-center justify-center'
-                    : 'w-10 h-10 rounded-xl text-gray-500 hover:bg-white/10 hover:text-white flex items-center justify-center transition-all';
-                btn.onclick = onClick;
-                container.appendChild(btn);
-            };
-
-            addBtn('<i data-lucide="chevron-left" class="w-5 h-5"></i>', () => { if(currentPage > 1){currentPage--; renderTable();} }, false, currentPage === 1);
-            let start = Math.max(1, currentPage - 2);
-            let end = Math.min(totalPages, start + 4);
-            if(end - start < 4) start = Math.max(1, end - 4);
-            
-            if(start > 1) addBtn('1', () => {currentPage=1; renderTable();});
-            for(let i=start; i<=end; i++) addBtn(i, () => {currentPage=i; renderTable();}, i===currentPage);
-            if(end < totalPages) addBtn(totalPages, () => {currentPage=totalPages; renderTable();});
-            
-            addBtn('<i data-lucide="chevron-right" class="w-5 h-5"></i>', () => { if(currentPage < totalPages){currentPage++; renderTable();} }, false, currentPage === totalPages);
-            lucide.createIcons();
-        }
-
-        // 6. Sorting & Filtering
-        function sortTable(key) {
-            if(sortKey === key) sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            else { sortKey = key; sortOrder = 'desc'; }
-            filteredData.sort((a,b) => {
-                let vA = a[key], vB = b[key];
-                if(typeof vA === 'string') return sortOrder === 'asc' ? vA.localeCompare(vB) : vB.localeCompare(vA);
-                return sortOrder === 'asc' ? vA - vB : vB - vA;
-            });
-            currentPage = 1; renderTable();
-        }
-
-        document.getElementById('tableSearch').oninput = (e) => {
-            const t = e.target.value.toLowerCase();
-            filteredData = processedData.filter(s => s.title.toLowerCase().includes(t));
-            currentPage = 1; renderTable();
-        };
-
-        document.getElementById('pageSizeSelect').onchange = (e) => {
-            pageSize = parseInt(e.target.value);
-            currentPage = 1; renderTable();
-        };
-
-        // 7. Charts Initialization (DYNAMIC)
         function initCharts() {
-            // 1. Scatter Chart
+            Chart.defaults.color = '#666';
+            Chart.defaults.font.family = 'Pretendard';
+
+            // Scatter
             new Chart(document.getElementById('scatterChart'), {
                 type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: '매물 데이터',
-                        data: processedData.map(s => ({x: s.size, y: s.rent})),
-                        backgroundColor: 'rgba(16, 185, 129, 0.4)',
-                        borderColor: '#10B981',
-                        borderWidth: 1,
-                        pointRadius: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { title: { display: true, text: '면적 (㎡)', color: '#666' }, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#666' } },
-                        y: { title: { display: true, text: '월세 (만원)', color: '#666' }, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#666' } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
+                data: { datasets: [{ label: '매물', data: processedData.map(s=>({x:s.size, y:s.rent})), backgroundColor: 'rgba(16, 185, 129, 0.4)', pointRadius: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#222' } }, y: { grid: { color: '#222' } } } }
             });
 
-            // 2. Deposit Histogram (Aggregation)
-            const depBins = ['0-3k', '3k-5k', '5k-10k', '10k-30k', '30k+'];
-            const depCounts = [0, 0, 0, 0, 0];
-            processedData.forEach(s => {
-                if(s.dep < 3000) depCounts[0]++;
-                else if(s.dep < 5000) depCounts[1]++;
-                else if(s.dep < 10000) depCounts[2]++;
-                else if(s.dep < 30000) depCounts[3]++;
-                else depCounts[4]++;
-            });
-
-            new Chart(document.getElementById('depositHistChart'), {
-                type: 'bar',
-                data: {
-                    labels: depBins,
-                    datasets: [{ label: '매물 수', data: depCounts, backgroundColor: 'rgba(59, 130, 246, 0.4)', borderColor: '#3b82f6', borderWidth: 2, borderRadius: 6 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#666' } }, x: { grid: { display: false }, ticks: { color: '#666' } } } }
-            });
-
-            // 3. Industry (Real Count)
+            // Industry
             const indMap = {};
-            processedData.forEach(s => {
-                const cat = s.category || '기타';
-                indMap[cat] = (indMap[cat] || 0) + 1;
-            });
-            const indLabels = Object.keys(indMap).sort((a,b) => indMap[b] - indMap[a]).slice(0, 7);
-            const indData = indLabels.map(l => indMap[l]);
-
+            processedData.forEach(s=> { const c = s.category || '기타'; indMap[c] = (indMap[c] || 0) + 1; });
+            const labels = Object.keys(indMap).sort((a,b)=>indMap[b]-indMap[a]).slice(0, 5);
             new Chart(document.getElementById('industryChart'), {
                 type: 'doughnut',
-                data: {
-                    labels: indLabels,
-                    datasets: [{
-                        data: indData,
-                        backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#022C22', '#111827'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9CA3AF', usePointStyle: true, boxWidth: 8, font: {size: 10} } } }, cutout: '75%' }
+                data: { labels, datasets: [{ data: labels.map(l=>indMap[l]), backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '75%' }
             });
 
-            // 4. Floor (Real Count)
-            const floorMap = {};
-            processedData.forEach(s => {
-                const f = s.floor || '정보없음';
-                floorMap[f] = (floorMap[f] || 0) + 1;
+            // Dep Hist
+            const depData = [0,0,0,0,0];
+            processedData.forEach(s=> {
+                if(s.dep < 5000) depData[0]++;
+                else if(s.dep < 10000) depData[1]++;
+                else if(s.dep < 30000) depData[2]++;
+                else if(s.dep < 100000) depData[3]++;
+                else depData[4]++;
             });
-            const floorLabels = ['지하', '1층', '2층', '3층', '4층', '5층', '6층+'];
-            const floorData = [
-                processedData.filter(s => s.floor && s.floor.includes('지하')).length,
-                processedData.filter(s => s.floor === '1').length,
-                processedData.filter(s => s.floor === '2').length,
-                processedData.filter(s => s.floor === '3').length,
-                processedData.filter(s => s.floor === '4').length,
-                processedData.filter(s => s.floor === '5').length,
-                processedData.filter(s => s.floor && parseInt(s.floor) >= 6).length
+            new Chart(document.getElementById('depHist'), {
+                type: 'bar',
+                data: { labels: ['~5k', '5k-10k', '10k-30k', '30k-100k', '100k+'], datasets: [{ data: depData, backgroundColor: 'rgba(59, 130, 246, 0.4)', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Rent Hist
+            const rentData = [0,0,0,0,0];
+            processedData.forEach(s=> {
+                if(s.rent < 100) rentData[0]++;
+                else if(s.rent < 250) rentData[1]++;
+                else if(s.rent < 500) rentData[2]++;
+                else if(s.rent < 1000) rentData[3]++;
+                else rentData[4]++;
+            });
+            new Chart(document.getElementById('rentHist'), {
+                type: 'bar',
+                data: { labels: ['~100', '100-250', '250-500', '500-1k', '1k+'], datasets: [{ data: rentData, backgroundColor: 'rgba(16, 185, 129, 0.4)', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Floor
+            const fData = [
+                processedData.filter(s=>/지하/.test(s.floor)).length,
+                processedData.filter(s=>s.floor==='1').length,
+                processedData.filter(s=>s.floor==='2').length,
+                processedData.filter(s=>s.floor==='3').length,
+                processedData.filter(s=>parseInt(s.floor)>=4).length
             ];
-
             new Chart(document.getElementById('floorChart'), {
                 type: 'bar',
-                data: {
-                    labels: floorLabels,
-                    datasets: [{ label: '매물 수', data: floorData, backgroundColor: 'rgba(16, 185, 129, 0.4)', borderColor: '#10B981', borderWidth: 2, borderRadius: 6 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#666' } }, x: { grid: { display: false }, ticks: { color: '#666' } } } }
+                data: { labels: ['지하', '1F', '2F', '3F', '4F+'], datasets: [{ data: fData, backgroundColor: 'rgba(251, 191, 36, 0.4)', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        // Initialize
+        document.getElementById('search').oninput = (e) => {
+            const t = e.target.value.toLowerCase();
+            filtered = processedData.filter(s=>s.title.toLowerCase().includes(t));
+            page = 1; updateUI();
+        };
+
+        document.getElementById('pageSize').onchange = (e) => {
+            size = parseInt(e.target.value);
+            page = 1; updateUI();
+        };
+
+        document.getElementById('lastUpdated').innerText = new Date().toLocaleTimeString();
         lucide.createIcons();
-        updateStats();
-        renderTable();
+        updateUI();
         initCharts();
     </script>
 </body>
