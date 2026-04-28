@@ -105,8 +105,17 @@
         <div class="glass-card p-8 rounded-3xl mb-10">
             <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                 <h2 class="text-2xl font-black">데이터 익스플로러</h2>
-                <div class="flex gap-4 w-full md:w-auto">
-                    <input type="text" id="search" placeholder="매물 검색..." class="bg-dark border border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-accent flex-1 md:w-64">
+                <div class="flex flex-wrap gap-4 w-full md:w-auto">
+                    <input type="text" id="search" placeholder="매물 검색..." class="bg-dark border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-accent flex-1 md:w-64">
+                    <select id="sortSelect" onchange="handleSort(this.value)" class="bg-dark border border-white/10 rounded-xl px-4 py-2 text-sm text-gray-300 focus:outline-none focus:border-accent">
+                        <option value="id-asc">등록순 (기본)</option>
+                        <option value="dep-desc">보증금 높은순</option>
+                        <option value="dep-asc">보증금 낮은순</option>
+                        <option value="rent-desc">월세 높은순</option>
+                        <option value="rent-asc">월세 낮은순</option>
+                        <option value="rentPy-asc">가성비순 (평당가 낮음)</option>
+                        <option value="views-desc">인기순 (조회수 많음)</option>
+                    </select>
                     <select id="pageSize" class="bg-dark border border-border rounded-xl px-4 py-2 text-sm">
                         <option value="10">10개</option>
                         <option value="20">20개씩</option>
@@ -118,13 +127,13 @@
                 <table class="w-full text-left">
                     <thead>
                         <tr class="text-gray-500 text-[10px] uppercase font-bold border-b border-border">
-                            <th class="p-4 w-16">#</th>
-                            <th class="p-4 cursor-pointer hover:text-accent transition-colors" onclick="handleSort('title')">매물 명칭 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('title')}</span></th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('dep')">보증금 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('dep')}</span></th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rent')">월세 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('rent')}</span></th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rentPy')">평당월세 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('rentPy')}</span></th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('size')">면적 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('size')}</span></th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-28" onclick="handleSort('views')">조회수 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('views')}</span></th>
+                            <th class="p-4 w-16 text-center">#</th>
+                            <th class="p-4">매물 명칭</th>
+                            <th class="p-4 w-32 text-right">보증금</th>
+                            <th class="p-4 w-32 text-right">월세</th>
+                            <th class="p-4 w-32 text-right">평당월세</th>
+                            <th class="p-4 w-32 text-right">면적</th>
+                            <th class="p-4 w-28 text-right">조회수</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
@@ -181,33 +190,23 @@
         let filtered = [...processedData];
         let page = 1;
         let size = 10;
-        let sortConfig = { key: null, direction: 'desc' };
+        let sortConfig = { key: 'id', direction: 'asc' };
 
-        function handleSort(key) {
-            if (sortConfig.key === key) {
-                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortConfig.key = key;
-                sortConfig.direction = 'desc';
-            }
+        function handleSort(val) {
+            const [key, dir] = val.split('-');
+            sortConfig.key = key;
+            sortConfig.direction = dir;
             updateUI();
-        }
-
-        function getSortIcon(key) {
-            if (sortConfig.key !== key) return '↕';
-            return sortConfig.direction === 'asc' ? '▲' : '▼';
         }
 
         function updateUI() {
             // Sort
-            if (sortConfig.key) {
-                filtered.sort((a, b) => {
-                    const v1 = a[sortConfig.key];
-                    const v2 = b[sortConfig.key];
-                    if (sortConfig.direction === 'asc') return v1 > v2 ? 1 : -1;
-                    return v1 < v2 ? 1 : -1;
-                });
-            }
+            filtered.sort((a, b) => {
+                const v1 = a[sortConfig.key];
+                const v2 = b[sortConfig.key];
+                if (sortConfig.direction === 'asc') return v1 > v2 ? 1 : -1;
+                return v1 < v2 ? 1 : -1;
+            });
 
             // Stats
             const total = processedData.length;
@@ -237,11 +236,11 @@
                             <span class="text-[10px] text-accent/70 font-medium">${s.category} • ${s.floor}</span>
                         </div>
                     </td>
-                    <td class="p-4 text-right font-medium text-gray-300 num-align text-sm">${s.dep.toLocaleString()}</td>
-                    <td class="p-4 text-right font-medium text-gray-300 num-align text-sm">${s.rent.toLocaleString()}</td>
-                    <td class="p-4 text-right font-medium num-align text-sm ${s.rentPy < avg*0.7 ? 'text-accent' : 'text-gray-300'}">${s.rentPy.toLocaleString()}</td>
-                    <td class="p-4 text-right font-medium text-gray-300 num-align text-sm">${s.size.toFixed(1)}</td>
-                    <td class="p-4 text-right font-medium text-gray-400/50 num-align text-sm group-hover:text-white/50 transition-colors">${s.views.toLocaleString()}</td>
+                    <td class="p-4 text-right font-bold text-white/90 num-align text-sm">${s.dep.toLocaleString()}</td>
+                    <td class="p-4 text-right font-bold text-white/90 num-align text-sm">${s.rent.toLocaleString()}</td>
+                    <td class="p-4 text-right font-bold text-white/90 num-align text-sm">${s.rentPy.toLocaleString()}</td>
+                    <td class="p-4 text-right font-bold text-white/90 num-align text-sm">${s.size.toFixed(1)}</td>
+                    <td class="p-4 text-right font-bold text-white/90 num-align text-sm">${s.views.toLocaleString()}</td>
                 </tr>
             `).join('');
 
