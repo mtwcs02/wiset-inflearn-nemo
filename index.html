@@ -53,6 +53,13 @@
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
+
+        /* Fixed Width Numbers for Table */
+        .num-align {
+            font-family: 'Pretendard', sans-serif;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.5px;
+        }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -228,17 +235,17 @@
                 const tr = document.createElement('tr');
                 tr.className = 'border-b border-border hover:bg-white/[0.03] transition-colors group';
                 tr.innerHTML = `
-                    <td class="p-5 text-gray-600 font-mono text-xs">${start + index + 1}</td>
+                    <td class="p-5 text-gray-600 num-align text-xs">${start + index + 1}</td>
                     <td class="p-5 font-semibold text-white group-hover:text-accent transition-colors">${s.title}</td>
-                    <td class="p-5 text-right font-medium">${s.dep.toLocaleString()}</td>
-                    <td class="p-5 text-right font-medium text-white">${s.rent.toLocaleString()}</td>
+                    <td class="p-5 text-right num-align">${s.dep.toLocaleString()}</td>
+                    <td class="p-5 text-right num-align text-white">${s.rent.toLocaleString()}</td>
                     <td class="p-5 text-right">
-                        <span class="px-2 py-1 rounded-md ${s.rentPerArea < 15 ? 'bg-accent/10 text-accent' : 'text-gray-400'} font-bold">
+                        <span class="px-2 py-1 rounded-md ${s.rentPerArea < 15 ? 'bg-accent/10 text-accent' : 'text-gray-400'} num-align">
                             ${s.rentPerArea.toLocaleString()}
                         </span>
                     </td>
-                    <td class="p-5 text-right text-gray-400">${s.size.toLocaleString()}</td>
-                    <td class="p-5 text-right font-black text-blue-500">${s.views.toLocaleString()}</td>
+                    <td class="p-5 text-right num-align text-gray-400">${s.size.toFixed(1)}</td>
+                    <td class="p-5 text-right num-align text-blue-500 font-bold">${s.views.toLocaleString()}</td>
                 `;
                 tableBody.appendChild(tr);
             });
