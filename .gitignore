@@ -1,0 +1,28 @@
+# Python 가상환경
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 데이터 및 대용량 파일 (CSV 등)
+data/
+*.csv
+*.xlsx
+*.parquet
+
+# IDE 관련 설정
+.vscode/
+.idea/
+
+# OS 생성 파일
+.DS_Store
+Thumbs.db
+
+# 환경 변수 및 비밀 키
+.env
+
+# uv 관련
+.uv/
+
+# 에이전트 설정 및 로그
+.agents/
