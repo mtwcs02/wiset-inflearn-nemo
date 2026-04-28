@@ -135,11 +135,35 @@
     </div>
 
     <script>
-        const processedData = allStores.map(s => ({
-            ...s,
-            rentPy: Math.round(s.rent / (s.size / 3.305)),
-            isSubway: /역|역세권|출구|도보/.test(s.title)
-        }));
+        const processedData = allStores.map(s => {
+            const sizeInPy = s.size / 3.305;
+            const rentPy = Math.round(s.rent / sizeInPy);
+            
+            // 제목에서 층 정보 추출
+            let floor = '지상';
+            if (/지하/.test(s.title)) floor = '지하';
+            else if (/1층/.test(s.title)) floor = '1층';
+            else if (/2층/.test(s.title)) floor = '2층';
+            else if (/3층/.test(s.title)) floor = '3층';
+            else if (/4층|5층|6층|탑층/.test(s.title)) floor = '4층+';
+
+            // 제목에서 업종 정보 추출
+            let category = '기타/미정';
+            if (/사무실|오피스/.test(s.title)) category = '사무실';
+            else if (/카페|디저트/.test(s.title)) category = '카페';
+            else if (/식당|음식점|포차|주점/.test(s.title)) category = '음식점';
+            else if (/미용실|뷰티|헤어/.test(s.title)) category = '뷰티/미용';
+            else if (/스튜디오|작업실/.test(s.title)) category = '스튜디오';
+            else if (/상가|점포/.test(s.title)) category = '일반상가';
+
+            return {
+                ...s,
+                rentPy,
+                floor,
+                category,
+                isSubway: /역|역세권|출구|도보/.test(s.title)
+            };
+        });
 
         let filtered = [...processedData];
         let page = 1;
@@ -168,7 +192,12 @@
             body.innerHTML = pData.map((s,i)=>`
                 <tr class="border-b border-border/50 hover:bg-white/[0.02] transition-colors group">
                     <td class="p-4 text-gray-600 text-xs num-align">${start+i+1}</td>
-                    <td class="p-4 font-bold text-white/90">${s.title}</td>
+                    <td class="p-4 font-bold text-white/90">
+                        <div class="flex flex-col">
+                            <span>${s.title}</span>
+                            <span class="text-[10px] text-gray-500">${s.category} • ${s.floor}</span>
+                        </div>
+                    </td>
                     <td class="p-4 text-right num-align">${s.dep.toLocaleString()}</td>
                     <td class="p-4 text-right num-align">${s.rent.toLocaleString()}</td>
                     <td class="p-4 text-right"><span class="px-2 py-0.5 rounded text-xs num-align ${s.rentPy < avg*0.7 ? 'bg-accent/10 text-accent' : 'text-gray-500'}">${s.rentPy.toLocaleString()}</span></td>
@@ -205,11 +234,11 @@
 
             // Industry
             const indMap = {};
-            processedData.forEach(s=> { const c = s.category || '기타'; indMap[c] = (indMap[c] || 0) + 1; });
-            const labels = Object.keys(indMap).sort((a,b)=>indMap[b]-indMap[a]).slice(0, 5);
+            processedData.forEach(s=> { indMap[s.category] = (indMap[s.category] || 0) + 1; });
+            const labels = Object.keys(indMap).sort((a,b)=>indMap[b]-indMap[a]);
             new Chart(document.getElementById('industryChart'), {
                 type: 'doughnut',
-                data: { labels, datasets: [{ data: labels.map(l=>indMap[l]), backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B'], borderWidth: 0 }] },
+                data: { labels, datasets: [{ data: labels.map(l=>indMap[l]), backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#111827'], borderWidth: 0 }] },
                 options: { responsive: true, maintainAspectRatio: false, cutout: '75%' }
             });
 
@@ -244,16 +273,12 @@
             });
 
             // Floor
-            const fData = [
-                processedData.filter(s=>/지하/.test(s.floor)).length,
-                processedData.filter(s=>s.floor==='1').length,
-                processedData.filter(s=>s.floor==='2').length,
-                processedData.filter(s=>s.floor==='3').length,
-                processedData.filter(s=>parseInt(s.floor)>=4).length
-            ];
+            const fMap = {'지하':0, '1층':0, '2층':0, '3층':0, '4층+':0};
+            processedData.forEach(s=> { fMap[s.floor] = (fMap[s.floor] || 0) + 1; });
+            const floorLabels = Object.keys(fMap);
             new Chart(document.getElementById('floorChart'), {
                 type: 'bar',
-                data: { labels: ['지하', '1F', '2F', '3F', '4F+'], datasets: [{ data: fData, backgroundColor: 'rgba(251, 191, 36, 0.4)', borderRadius: 4 }] },
+                data: { labels: floorLabels, datasets: [{ data: floorLabels.map(l=>fMap[l]), backgroundColor: 'rgba(251, 191, 36, 0.4)', borderRadius: 4 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
