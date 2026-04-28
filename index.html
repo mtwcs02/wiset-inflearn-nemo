@@ -9,9 +9,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F1115',
+                        card: '#1A1D24',
+                        accent: '#10B981',
+                        border: '#2D333F',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
+        
         :root {
             --bg-color: #0F1115;
             --card-bg: #1A1D24;
@@ -19,8 +36,32 @@
             --text-primary: #F3F4F6;
             --text-secondary: #9CA3AF;
             --border-color: #2D333F;
-            --glass-bg: rgba(26, 29, 36, 0.7);
         }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(26, 29, 36, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0F1115; }
+        ::-webkit-scrollbar-thumb { background: #2D333F; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #10B981; }
+
+        /* Sorting Icons */
+        .sort-icon::after {
+            content: '↕';
+            margin-left: 5px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+    </style>
 
         * {
             margin: 0;
@@ -334,26 +375,53 @@
                 </div>
             </div>
 
-            <!-- Data Table -->
-            <div class="card table-card animate delay-4">
-                <div class="card-header">
-                    <h2><i data-lucide="list"></i> 조회수 상위 매물</h2>
+            <!-- 데이터 익스플로러 (개선된 테이블) -->
+            <div class="card table-card animate delay-4 col-span-12">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-1 h-6 bg-accent rounded-full"></div>
+                        <h2 class="text-xl font-bold">데이터 익스플로러</h2>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                        <div class="relative flex-1 md:flex-none">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="tableSearch" placeholder="매물 명칭 검색..." 
+                                class="bg-dark border border-border rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-accent w-full">
+                        </div>
+                        <select id="pageSizeSelect" class="bg-dark border border-border rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-accent">
+                            <option value="5">5개씩 보기</option>
+                            <option value="10" selected>10개씩 보기</option>
+                            <option value="20">20개씩 보기</option>
+                        </select>
+                    </div>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>매물 명칭</th>
-                            <th>보증금</th>
-                            <th>월세</th>
-                            <th>권리금</th>
-                            <th>면적</th>
-                            <th>조회수</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataTableBody">
-                        <!-- JS populated -->
-                    </tbody>
-                </table>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-border text-sm">
+                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon" onclick="sortTable('title')">매물 명칭</th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('dep')">보증금</th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rent')">월세</th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('prem')">권리금</th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('size')">면적(㎡)</th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('views')">조회수</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody" class="text-sm">
+                            <!-- JS를 통해 데이터가 채워집니다 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+                    <div class="text-sm text-gray-400" id="tableInfo">
+                        결과: 0 - 0 / 0
+                    </div>
+                    <div class="flex items-center gap-2" id="paginationControls">
+                        <!-- 페이지네이션 버튼들이 여기에 생성됩니다 -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -362,7 +430,129 @@
         // Init Lucide Icons
         lucide.createIcons();
 
-        // Data from Report
+        // Data for Explorer
+        const allStores = [
+            {title: "신논현역 초역세권 고깃집", dep: 40000, rent: 6700, prem: 180000, size: 66.12, views: 988},
+            {title: "역삼동 위치조건 뛰어난 카페", dep: 10000, rent: 1000, prem: 30000, size: 19.83, views: 956},
+            {title: "인테리어 완비된 역삼동 고깃집", dep: 180000, rent: 14000, prem: 300000, size: 115.7, views: 956},
+            {title: "강남역 점프 밀라노 방탈출 매장", dep: 40000, rent: 3800, prem: 130000, size: 115.17, views: 943},
+            {title: "접근성 좋은 서초동 파티룸", dep: 10000, rent: 1350, prem: 5000, size: 38.81, views: 940},
+            {title: "테라스 돋보이는 깔끔한 상가", dep: 60000, rent: 5000, prem: 20000, size: 109.09, views: 925},
+            {title: "역삼역 인근 대형 사무실", dep: 200000, rent: 18000, prem: 0, size: 250.5, views: 880},
+            {title: "서초동 조용한 스터디 카페", dep: 5000, rent: 250, prem: 10000, size: 45.2, views: 850},
+            {title: "강남역 인근 루프탑 와인바", dep: 80000, rent: 4500, prem: 50000, size: 82.3, views: 720},
+            {title: "테헤란로 대로변 오피스", dep: 150000, rent: 12000, prem: 0, size: 145.8, views: 650},
+            {title: "논현동 먹자골목 이자카야", dep: 30000, rent: 280, prem: 8000, size: 55.4, views: 610},
+            {title: "청담동 분위기 좋은 바 자리", dep: 10000, rent: 800, prem: 15000, size: 33.1, views: 590}
+        ];
+
+        let filteredData = [...allStores];
+        let currentPage = 1;
+        let pageSize = 10;
+        let sortKey = 'views';
+        let sortOrder = 'desc';
+
+        function renderTable() {
+            const tableBody = document.getElementById('dataTableBody');
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageData = filteredData.slice(start, end);
+
+            tableBody.innerHTML = '';
+            pageData.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-border hover:bg-white/5 transition';
+                tr.innerHTML = `
+                    <td class="p-4 font-medium text-white">${s.title}</td>
+                    <td class="p-4 text-right">${s.dep.toLocaleString()}</td>
+                    <td class="p-4 text-right">${s.rent.toLocaleString()}</td>
+                    <td class="p-4 text-right">${s.prem.toLocaleString()}</td>
+                    <td class="p-4 text-right">${s.size}</td>
+                    <td class="p-4 text-right font-bold text-blue-400">${s.views}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Update Info
+            document.getElementById('tableInfo').innerText = 
+                `결과: ${filteredData.length > 0 ? start + 1 : 0} - ${Math.min(end, filteredData.length)} / ${filteredData.length}`;
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const container = document.getElementById('paginationControls');
+            const totalPages = Math.ceil(filteredData.length / pageSize);
+            container.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            // Prev
+            const prevBtn = document.createElement('button');
+            prevBtn.innerText = '이전';
+            prevBtn.className = `px-3 py-1 rounded-md text-sm ${currentPage === 1 ? 'text-gray-600 cursor-not-allowed' : 'text-gray-300 hover:bg-accent hover:text-white'}`;
+            prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); } };
+            container.appendChild(prevBtn);
+
+            // Pages
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `w-8 h-8 rounded-md text-sm transition ${i === currentPage ? 'bg-accent text-white font-bold' : 'text-gray-400 hover:bg-white/10'}`;
+                btn.onclick = () => { currentPage = i; renderTable(); };
+                container.appendChild(btn);
+            }
+
+            // Next
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = '다음';
+            nextBtn.className = `px-3 py-1 rounded-md text-sm ${currentPage === totalPages ? 'text-gray-600 cursor-not-allowed' : 'text-gray-300 hover:bg-accent hover:text-white'}`;
+            nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); } };
+            container.appendChild(nextBtn);
+        }
+
+        function sortTable(key) {
+            if (sortKey === key) {
+                sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortKey = key;
+                sortOrder = 'desc';
+            }
+            
+            filteredData.sort((a, b) => {
+                let valA = a[key];
+                let valB = b[key];
+                if (typeof valA === 'string') {
+                    return sortOrder === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                }
+                return sortOrder === 'asc' ? valA - valB : valB - valA;
+            });
+            
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Search Logic
+        document.getElementById('tableSearch').oninput = (e) => {
+            const term = e.target.value.toLowerCase();
+            filteredData = allStores.filter(s => 
+                s.title.toLowerCase().includes(term)
+            );
+            currentPage = 1;
+            renderTable();
+        };
+
+        // Page Size Logic
+        document.getElementById('pageSizeSelect').onchange = (e) => {
+            pageSize = parseInt(e.target.value);
+            currentPage = 1;
+            renderTable();
+        };
+
+        // Initialize Table
+        renderTable();
+
+        // Charts
         const industryData = {
             labels: ['기타업종', '일반음식점', '서비스업', '휴게음식점', '오락스포츠', '주류점', '판매업'],
             counts: [325, 96, 86, 85, 36, 31, 14]
@@ -370,7 +560,7 @@
 
         const floorData = {
             labels: ['지하 2층 이하', '지하 1층', '1층', '2층', '3층', '4층', '5층', '6층 이상'],
-            counts: [9, 123, 209, 108, 57, 59, 44, 64] // 6층 이상 aggregated for visual
+            counts: [9, 123, 209, 108, 57, 59, 44, 64]
         };
 
         const keywords = [
@@ -382,17 +572,6 @@
             {word: "역세권", weight: 29.7},
             {word: "무권리", weight: 25.6},
             {word: "신논현역", weight: 23.3}
-        ];
-
-        const topStores = [
-            {title: "신논현역 초역세권 고깃집", dep: "40,000", rent: "6,700", prem: "180,000", size: "66.12", views: "988"},
-            {title: "역삼동 위치조건 뛰어난 카페", dep: "10,000", rent: "1,000", prem: "30,000", size: "19.83", views: "956"},
-            {title: "인테리어 완비된 역삼동 고깃집", dep: "180,000", rent: "14,000", prem: "300,000", size: "115.7", views: "956"},
-            {title: "강남역 점프 밀라노 방탈출 매장", dep: "40,000", rent: "3,800", prem: "130,000", size: "115.17", views: "943"},
-            {title: "접근성 좋은 서초동 파티룸", dep: "10,000", rent: "1,350", prem: "5,000", size: "38.81", views: "940"},
-            {title: "테라스 돋보이는 깔끔한 상가", dep: "60,000", rent: "5,000", prem: "20,000", size: "109.09", views: "925"},
-            {title: "역삼역 인근 대형 사무실", dep: "200,000", rent: "18,000", prem: "0", size: "250.5", views: "880"},
-            {title: "서초동 조용한 스터디 카페", dep: "5,000", rent: "250", prem: "10,000", size: "45.2", views: "850"}
         ];
 
         // Industry Doughnut Chart
@@ -417,7 +596,7 @@
                         position: 'right',
                         labels: {
                             color: '#9CA3AF',
-                            font: { family: 'DM Sans', size: 12 },
+                            font: { family: 'Pretendard', size: 12 },
                             usePointStyle: true,
                             padding: 20
                         }
@@ -446,31 +625,15 @@
                     backgroundColor: 'rgba(16, 185, 129, 0.4)',
                     borderColor: '#10B981',
                     borderWidth: 2,
-                    borderRadius: 6,
-                    hoverBackgroundColor: '#10B981'
+                    borderRadius: 6
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1A1D24',
-                        padding: 12,
-                        cornerRadius: 8
-                    }
-                },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#9CA3AF', font: { family: 'Outfit' } }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#9CA3AF', font: { family: 'Outfit' } }
-                    }
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } },
+                    x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
                 }
             }
         });
@@ -481,12 +644,11 @@
             const div = document.createElement('div');
             div.className = 'keyword-item';
             div.innerHTML = `
-                <span class="keyword-name">${k.word}</span>
-                <span class="keyword-score">${k.weight}</span>
+                <span class="keyword-name text-white">${k.word}</span>
+                <span class="keyword-score text-accent font-bold">${k.weight}</span>
             `;
             keywordContainer.appendChild(div);
         });
-
         // Populate Table
         const tableBody = document.getElementById('dataTableBody');
         topStores.forEach(s => {
