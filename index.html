@@ -35,7 +35,10 @@
     <div class="max-w-[1440px] mx-auto">
         <header class="flex justify-between items-center mb-10 pb-4 border-b border-border">
             <div>
-                <h1 class="text-4xl font-black bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">nemo 분석</h1>
+                <h1 class="text-4xl font-black bg-gradient-to-r from-white to-accent bg-clip-text text-transparent inline-flex items-center">
+                    nemo 분석
+                    <span class="text-[10px] font-normal text-gray-600 ml-3 tracking-widest opacity-50">V2.1</span>
+                </h1>
                 <p class="text-gray-400 text-sm mt-1">강남 상권 매물 673건 실시간 데이터 분석</p>
             </div>
             <div class="hidden md:flex gap-2">
@@ -69,7 +72,7 @@
             <div class="stat-card glass-card p-5 rounded-2xl animate" style="animation-delay: 0.5s">
                 <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">역세권 비율</div>
                 <div class="text-2xl font-black" id="subwayRate">0<span class="text-xs font-normal text-gray-600 ml-1">%</span></div>
-                <div class="mt-1 text-[10px] text-purple-400">역 300m 이내 추정</div>
+                <div class="mt-1 text-[10px] text-purple-400">역세권 키워드 분석</div>
             </div>
         </div>
 
@@ -106,8 +109,8 @@
                     <input type="text" id="search" placeholder="매물 검색..." class="bg-dark border border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-accent flex-1 md:w-64">
                     <select id="pageSize" class="bg-dark border border-border rounded-xl px-4 py-2 text-sm">
                         <option value="10">10개</option>
-                        <option value="20">20개</option>
-                        <option value="50">50개</option>
+                        <option value="20">20개씩</option>
+                        <option value="50">50개씩</option>
                     </select>
                 </div>
             </div>
@@ -139,25 +142,32 @@
             const sizeInPy = s.size / 3.305;
             const rentPy = Math.round(s.rent / sizeInPy);
             
-            // 층 정보 추출 (지하, 1층, 2층, 3층, 4층+로 정규화)
-            let floor = '1층'; // 기본값
-            if (/지하/.test(s.title)) floor = '지하';
-            else if (/1층/.test(s.title)) floor = '1층';
-            else if (/2층/.test(s.title)) floor = '2층';
-            else if (/3층/.test(s.title)) floor = '3층';
-            else if (/4층|5층|6층|7층|8층|9층|10층|11층|12층|탑층|옥탑|루프탑|고층/.test(s.title)) floor = '4층+';
-            else if (/지상/.test(s.title)) floor = '2층'; // 지상은 보통 2층 이상 의미가 많으므로 매핑
+            // 층 정보 추출 개선 (숫자 매칭 우선)
+            let floor = '1층'; 
+            const fMatch = s.title.match(/(지하\s*\d*|B\d+|\d+\s*층)/i);
+            if (fMatch) {
+                const f = fMatch[0].toLowerCase();
+                if (f.includes('지하') || f.startsWith('b')) floor = '지하';
+                else if (f.includes('2층')) floor = '2층';
+                else if (f.includes('3층')) floor = '3층';
+                else if (/[4-9]층|1\d층/.test(f)) floor = '4층+';
+                else floor = '1층';
+            } else {
+                if (/탑층|옥탑|루프탑|고층/.test(s.title)) floor = '4층+';
+                else if (/지하/.test(s.title)) floor = '지하';
+                else if (/지상/.test(s.title)) floor = '2층';
+            }
 
-            // 업종 정보 추출 (더 넓은 키워드 매칭)
+            // 업종 정보 추출 (키워드 대폭 확장)
             let category = '기타/미분류';
             const t = s.title;
-            if (/사무실|오피스|업무|워크|세무|법무|아이티|IT/.test(t)) category = '사무실';
-            else if (/카페|디저트|커피|베이커리/.test(t)) category = '카페';
-            else if (/식당|음식점|포차|주점|이자카야|치킨|분식|한식|중식|일식|고기|레스토랑|주방|피자|만두/.test(t)) category = '음식점';
-            else if (/미용실|뷰티|헤어|왁싱|네일|에스테틱|피부|샵|바버/.test(t)) category = '뷰티/미용';
-            else if (/스튜디오|작업실|연습실|촬영|갤러리/.test(t)) category = '스튜디오';
-            else if (/노래방|당구장|헬스|필라테스|요가|골프|파티룸|방탈출|스터디|학원|클럽|바|Bar/.test(t)) category = '엔터/운동';
-            else if (/상가|점포|매장|편의점|마트|슈퍼|판매|공실/.test(t)) category = '일반상가';
+            if (/사무실|오피스|업무|워크|세무|법무|아이티|IT|연구소/.test(t)) category = '사무실';
+            else if (/카페|디저트|커피|베이커리|커피숍|차|Tea/.test(t)) category = '카페';
+            else if (/식당|음식점|포차|주점|이자카야|치킨|분식|한식|중식|일식|고기|레스토랑|주방|피자|만두|호프|술집|구이|요리|펍|Pub/.test(t)) category = '음식점';
+            else if (/미용실|뷰티|헤어|왁싱|네일|에스테틱|피부|샵|바버|마사지|스파/.test(t)) category = '뷰티/미용';
+            else if (/스튜디오|작업실|연습실|촬영|갤러리|렌탈|사진|유튜브/.test(t)) category = '스튜디오';
+            else if (/노래방|당구장|헬스|필라테스|요가|골프|파티룸|방탈출|스터디|학원|클럽|바|Bar|테니스|볼링/.test(t)) category = '엔터/운동';
+            else if (/상가|점포|매장|편의점|마트|슈퍼|판매|공실|쇼룸|약국|플래그십/.test(t)) category = '일반상가';
 
             return {
                 ...s,
