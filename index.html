@@ -3,36 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nemo Analytics | 니모 스토어 분석 대시보드</title>
-    <meta name="description" content="니모 스토어의 강남 지역 상권 데이터 분석 대시보드입니다. 업종 분포, 층별 분포, 주요 키워드 분석을 제공합니다.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Nemo Analytics | 니모 스토어 분석 대시보드">
-    <meta property="og:description" content="강남 지역 상권 데이터 시각화 및 인사이트 대시보드">
-    <meta property="og:type" content="website">
-
+    <title>Nemo Stores Analytics Dashboard</title>
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <style>
         :root {
-            --bg-dark: #08090C;
-            --bg-card: #12141C;
-            --accent-primary: #10B981;
-            --accent-secondary: #3B82F6;
-            --accent-glow: rgba(16, 185, 129, 0.2);
+            --bg-color: #0F1115;
+            --card-bg: #1A1D24;
+            --accent-color: #10B981;
             --text-primary: #F3F4F6;
             --text-secondary: #9CA3AF;
-            --text-dim: #6B7280;
-            --border: rgba(255, 255, 255, 0.08);
-            --glass: rgba(255, 255, 255, 0.03);
-            --gradient: linear-gradient(135deg, #10B981 0%, #3B82F6 100%);
+            --border-color: #2D333F;
+            --glass-bg: rgba(26, 29, 36, 0.7);
         }
 
         * {
@@ -42,115 +29,45 @@
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Noto Sans KR', 'DM Sans', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             line-height: 1.6;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
         }
 
         h1, h2, h3 {
-            font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+            font-family: 'Outfit', sans-serif;
             font-weight: 600;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-dim);
         }
 
         /* Layout */
         .container {
-            max-width: 1440px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2.5rem;
+            padding: 2rem;
         }
 
         header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 4rem;
-            position: relative;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -1.5rem;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, var(--border), transparent);
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .header-title h1 {
-            font-size: 3rem;
-            letter-spacing: -1.5px;
-            background: linear-gradient(90deg, #FFF, #10B981, #3B82F6);
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #FFF, #10B981);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
         }
 
         .header-title p {
             color: var(--text-secondary);
-            font-size: 1.1rem;
-            font-weight: 300;
-        }
-
-        .header-action {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* Badge/Tag */
-        .badge {
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .badge.live {
-            color: var(--accent-primary);
-            border-color: var(--accent-glow);
-        }
-
-        .badge.live .dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-primary);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+            font-size: 0.9rem;
         }
 
         /* Stats Grid */
@@ -158,78 +75,58 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .stat-card {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid var(--border);
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .stat-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient);
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .stat-card:hover::before {
-            opacity: 1;
-        }
-
-        .stat-card i.bg-icon {
+        .stat-card i {
             position: absolute;
             right: -10px;
             bottom: -10px;
-            font-size: 6rem;
-            opacity: 0.03;
-            color: var(--text-primary);
-            transform: rotate(-15deg);
+            font-size: 5rem;
+            opacity: 0.05;
+            color: var(--accent-color);
         }
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
 
         .stat-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.75rem;
+            font-size: 2.25rem;
             font-weight: 800;
             color: #FFF;
-            margin-bottom: 0.5rem;
         }
 
         .stat-trend {
-            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
         }
 
-        .trend-up { color: var(--accent-primary); }
-        .trend-neutral { color: var(--text-dim); }
+        .stat-trend.up { color: var(--accent-color); }
 
         /* Main Grid */
         .main-grid {
@@ -239,30 +136,25 @@
         }
 
         .card {
-            background: var(--bg-card);
-            border-radius: 1.5rem;
-            border: 1px solid var(--border);
-            padding: 2rem;
-            transition: border-color 0.3s;
-        }
-
-        .card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
+            background: var(--card-bg);
+            border-radius: 1.25rem;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .card-header {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .card-header h2 {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            color: #FFF;
         }
 
         /* Specific Cards */
@@ -271,97 +163,86 @@
         .keyword-card { grid-column: span 4; }
         .table-card { grid-column: span 8; }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1100px) {
             .industry-card, .floor-card, .keyword-card, .table-card {
                 grid-column: span 12;
             }
         }
 
+        /* Charts Wrapper */
         .chart-container {
             position: relative;
-            height: 350px;
+            height: 300px;
             width: 100%;
         }
 
-        /* Keywords */
+        /* Keyword List */
         .keyword-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .keyword-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.25rem;
-            background: var(--glass);
-            border: 1px solid transparent;
-            border-radius: 1rem;
-            transition: all 0.2s;
-            cursor: default;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0.75rem;
+            transition: 0.2s;
         }
 
         .keyword-item:hover {
-            background: rgba(16, 185, 129, 0.08);
-            border-color: var(--accent-glow);
-            transform: scale(1.02);
+            background: rgba(16, 185, 129, 0.1);
         }
 
         .keyword-name { font-weight: 500; }
         .keyword-score {
             font-family: 'Outfit', sans-serif;
-            color: var(--accent-primary);
-            font-weight: 700;
-            background: var(--accent-glow);
-            padding: 0.2rem 0.6rem;
-            border-radius: 0.5rem;
-            font-size: 0.85rem;
+            color: var(--accent-color);
+            font-weight: 600;
         }
 
-        /* Table */
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
+        /* Table Styles */
         .data-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 0.5rem;
-            font-size: 0.95rem;
+            border-collapse: collapse;
+            font-size: 0.9rem;
         }
 
         .data-table th {
             text-align: left;
-            padding: 1rem 1.5rem;
-            color: var(--text-dim);
+            padding: 1rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
             font-weight: 500;
-            border-bottom: 1px solid var(--border);
         }
 
         .data-table td {
-            padding: 1.25rem 1.5rem;
-            background: var(--glass);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .data-table tr td:first-child { border-radius: 1rem 0 0 1rem; }
-        .data-table tr td:last-child { border-radius: 0 1rem 1rem 0; }
+        .data-table tr:last-child td { border-bottom: none; }
 
-        .data-table tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
+        .tag {
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-color);
         }
-
-        .price { font-family: 'Outfit', sans-serif; font-weight: 600; }
-        .unit { font-size: 0.8rem; color: var(--text-dim); font-weight: 400; margin-left: 2px; }
 
         /* Animations */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .animate {
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
         }
 
@@ -377,168 +258,153 @@
         <header>
             <div class="header-title">
                 <h1>Nemo Analytics</h1>
-                <p>니모 스토어 강남 상권 데이터 대시보드 v1.0</p>
+                <p>Nemo Stores Market Data Analysis Dashboard • Gangnam Area</p>
             </div>
             <div class="header-action">
-                <div class="badge live">
-                    <div class="dot"></div>
-                    실시간 데이터 연결됨
-                </div>
-                <div class="badge">
-                    <i data-lucide="clock" style="width:14px"></i>
-                    마지막 업데이트: 2026.04.28
-                </div>
+                <span class="tag">Last Updated: 2026.04.28</span>
             </div>
         </header>
 
         <!-- Stats Section -->
         <div class="stats-grid">
             <div class="stat-card animate delay-1">
-                <i data-lucide="store" class="bg-icon"></i>
-                <div class="stat-label">총 등록 매물 수</div>
+                <i data-lucide="store"></i>
+                <div class="stat-label">Total Stores</div>
                 <div class="stat-value">673</div>
-                <div class="stat-trend trend-up">
-                    <i data-lucide="arrow-up-right" style="width:16px"></i>
-                    <span>시장 지배력 높음</span>
+                <div class="stat-trend up">
+                    <i data-lucide="trending-up" style="width:14px"></i>
+                    <span>Market Dominance High</span>
                 </div>
             </div>
             <div class="stat-card animate delay-2">
-                <i data-lucide="coins" class="bg-icon"></i>
-                <div class="stat-label">평균 보증금</div>
-                <div class="stat-value">6,895<span class="unit">만원</span></div>
-                <div class="stat-trend trend-neutral">
-                    <span>중앙값: 4,000 만원</span>
+                <i data-lucide="coins"></i>
+                <div class="stat-label">Avg. Deposit</div>
+                <div class="stat-value">6,895<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> 만원</span></div>
+                <div class="stat-trend">
+                    <span>Median: 4,000 만원</span>
                 </div>
             </div>
             <div class="stat-card animate delay-3">
-                <i data-lucide="calendar" class="bg-icon"></i>
-                <div class="stat-label">평균 월세</div>
-                <div class="stat-value">534<span class="unit">만원</span></div>
-                <div class="stat-trend trend-neutral">
-                    <span>중앙값: 340 만원</span>
+                <i data-lucide="calendar"></i>
+                <div class="stat-label">Avg. Monthly Rent</div>
+                <div class="stat-value">534<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> 만원</span></div>
+                <div class="stat-trend">
+                    <span>Median: 340 만원</span>
                 </div>
             </div>
             <div class="stat-card animate delay-4">
-                <i data-lucide="maximize" class="bg-icon"></i>
-                <div class="stat-label">평균 면적</div>
-                <div class="stat-value">127.6<span class="unit">㎡</span></div>
-                <div class="stat-trend trend-neutral">
-                    <span>약 38.6 평 규모</span>
+                <i data-lucide="maximize"></i>
+                <div class="stat-label">Avg. Size</div>
+                <div class="stat-value">127.6<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> ㎡</span></div>
+                <div class="stat-trend">
+                    <span>Approx. 38.6 평</span>
                 </div>
             </div>
         </div>
 
         <!-- Charts Grid -->
         <div class="main-grid">
+            <!-- Industry Distribution -->
             <div class="card industry-card animate delay-2">
                 <div class="card-header">
-                    <h2><i data-lucide="pie-chart"></i> 업종별 분포</h2>
-                    <div class="badge">Top Categories</div>
+                    <h2><i data-lucide="pie-chart"></i> Industry Distribution</h2>
                 </div>
                 <div class="chart-container">
                     <canvas id="industryChart"></canvas>
                 </div>
             </div>
 
+            <!-- Floor Distribution -->
             <div class="card floor-card animate delay-3">
                 <div class="card-header">
-                    <h2><i data-lucide="layers"></i> 층별 매물 분포</h2>
-                    <div class="badge">Floor Analysis</div>
+                    <h2><i data-lucide="layers"></i> Floor Distribution</h2>
                 </div>
                 <div class="chart-container">
                     <canvas id="floorChart"></canvas>
                 </div>
             </div>
 
+            <!-- Keywords -->
             <div class="card keyword-card animate delay-4">
                 <div class="card-header">
-                    <h2><i data-lucide="hash"></i> 주요 분석 키워드 (TF-IDF)</h2>
+                    <h2><i data-lucide="hash"></i> Top TF-IDF Keywords</h2>
                 </div>
                 <div class="keyword-list" id="keywordList">
                     <!-- JS populated -->
                 </div>
             </div>
 
+            <!-- Data Table -->
             <div class="card table-card animate delay-4">
                 <div class="card-header">
-                    <h2><i data-lucide="trending-up"></i> 조회수 상위 매물</h2>
-                    <div class="badge live">Hot Listings</div>
+                    <h2><i data-lucide="list"></i> Top Viewed Listings</h2>
                 </div>
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>매물 명칭</th>
-                                <th>보증금</th>
-                                <th>월세</th>
-                                <th>권리금</th>
-                                <th>면적</th>
-                                <th>조회수</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataTableBody">
-                            <!-- JS populated -->
-                        </tbody>
-                    </table>
-                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Store Title</th>
+                            <th>Deposit</th>
+                            <th>Rent</th>
+                            <th>Premium</th>
+                            <th>Size</th>
+                            <th>Views</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody">
+                        <!-- JS populated -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Init Lucide
+        // Init Lucide Icons
         lucide.createIcons();
 
-        // Colors
-        const colors = {
-            emerald: '#10B981',
-            blue: '#3B82F6',
-            violet: '#8B5CF6',
-            amber: '#F59E0B',
-            rose: '#F43F5E',
-            slate: '#475569',
-            dark: '#1E293B'
-        };
-
-        // Data
+        // Data from Report
         const industryData = {
             labels: ['기타업종', '일반음식점', '서비스업', '휴게음식점', '오락스포츠', '주류점', '판매업'],
             counts: [325, 96, 86, 85, 36, 31, 14]
         };
 
         const floorData = {
-            labels: ['B2 이하', 'B1층', '1층', '2층', '3층', '4층', '5층', '6층 이상'],
-            counts: [9, 123, 209, 108, 57, 59, 44, 64]
+            labels: ['지하 2층 이하', '지하 1층', '1층', '2층', '3층', '4층', '5층', '6층 이상'],
+            counts: [9, 123, 209, 108, 57, 59, 44, 64] // 6층 이상 aggregated for visual
         };
 
         const keywords = [
-            {word: "아정당부동산", weight: 123},
+            {word: "아정당부동산중개법인", weight: 123},
             {word: "역삼동", weight: 70.4},
             {word: "강남역", weight: 47.2},
             {word: "인테리어", weight: 33.9},
             {word: "서초동", weight: 31.5},
             {word: "역세권", weight: 29.7},
-            {word: "무권리", weight: 25.6}
+            {word: "무권리", weight: 25.6},
+            {word: "신논현역", weight: 23.3}
         ];
 
         const topStores = [
-            {title: "신논현역 고깃집", dep: "40,000", rent: "6,700", prem: "180,000", size: "66.12", views: "988"},
-            {title: "역삼동 카페", dep: "10,000", rent: "1,000", prem: "30,000", size: "19.83", views: "956"},
-            {title: "역삼동 고깃집", dep: "180,000", rent: "14,000", prem: "300,000", size: "115.7", views: "956"},
-            {title: "강남역 방탈출", dep: "40,000", rent: "3,800", prem: "130,000", size: "115.17", views: "943"},
-            {title: "서초동 파티룸", dep: "10,000", rent: "1,350", prem: "5,000", size: "38.81", views: "940"}
+            {title: "신논현역 초역세권 고깃집", dep: "40,000", rent: "6,700", prem: "180,000", size: "66.12", views: "988"},
+            {title: "역삼동 위치조건 뛰어난 카페", dep: "10,000", rent: "1,000", prem: "30,000", size: "19.83", views: "956"},
+            {title: "인테리어 완비된 역삼동 고깃집", dep: "180,000", rent: "14,000", prem: "300,000", size: "115.7", views: "956"},
+            {title: "강남역 점프 밀라노 방탈출 매장", dep: "40,000", rent: "3,800", prem: "130,000", size: "115.17", views: "943"},
+            {title: "접근성 좋은 서초동 파티룸", dep: "10,000", rent: "1,350", prem: "5,000", size: "38.81", views: "940"},
+            {title: "테라스 돋보이는 깔끔한 상가", dep: "60,000", rent: "5,000", prem: "20,000", size: "109.09", views: "925"}
         ];
 
-        // Industry Chart
+        // Industry Doughnut Chart
         new Chart(document.getElementById('industryChart'), {
             type: 'doughnut',
             data: {
                 labels: industryData.labels,
                 datasets: [{
                     data: industryData.counts,
-                    backgroundColor: [colors.emerald, colors.blue, colors.violet, colors.amber, colors.rose, colors.slate, colors.dark],
+                    backgroundColor: [
+                        '#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#022C22', '#111827'
+                    ],
                     borderWidth: 0,
-                    hoverOffset: 15
+                    hoverOffset: 10
                 }]
             },
             options: {
@@ -549,46 +415,65 @@
                         position: 'right',
                         labels: {
                             color: '#9CA3AF',
-                            font: { family: 'Noto Sans KR', size: 12 },
+                            font: { family: 'DM Sans', size: 12 },
                             usePointStyle: true,
                             padding: 20
                         }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1A1D24',
+                        titleFont: { family: 'Outfit', size: 14 },
+                        bodyFont: { family: 'DM Sans', size: 13 },
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: false
                     }
                 },
-                cutout: '75%'
+                cutout: '70%'
             }
         });
 
-        // Floor Chart
+        // Floor Bar Chart
         new Chart(document.getElementById('floorChart'), {
             type: 'bar',
             data: {
                 labels: floorData.labels,
                 datasets: [{
-                    label: '매물 수',
+                    label: 'Store Count',
                     data: floorData.counts,
-                    backgroundColor: 'rgba(59, 130, 246, 0.4)',
-                    borderColor: colors.blue,
+                    backgroundColor: 'rgba(16, 185, 129, 0.4)',
+                    borderColor: '#10B981',
                     borderWidth: 2,
-                    borderRadius: 8,
-                    hoverBackgroundColor: colors.blue
+                    borderRadius: 6,
+                    hoverBackgroundColor: '#10B981'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1D24',
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
                 scales: {
                     y: {
+                        beginAtZero: true,
                         grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#6B7280' }
+                        ticks: { color: '#9CA3AF', font: { family: 'Outfit' } }
                     },
-                    x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9CA3AF', font: { family: 'Outfit' } }
+                    }
                 }
             }
         });
 
-        // Keywords
+        // Populate Keywords
         const keywordContainer = document.getElementById('keywordList');
         keywords.forEach(k => {
             const div = document.createElement('div');
@@ -600,17 +485,17 @@
             keywordContainer.appendChild(div);
         });
 
-        // Table
+        // Populate Table
         const tableBody = document.getElementById('dataTableBody');
         topStores.forEach(s => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td style="font-weight:500">${s.title}</td>
-                <td class="price">${s.dep}<span class="unit">만</span></td>
-                <td class="price">${s.rent}<span class="unit">만</span></td>
-                <td class="price">${s.prem}<span class="unit">만</span></td>
-                <td>${s.size}㎡</td>
-                <td><span class="badge live">${s.views}</span></td>
+                <td>${s.dep}</td>
+                <td>${s.rent}</td>
+                <td>${s.prem}</td>
+                <td>${s.size} ㎡</td>
+                <td><span class="tag">${s.views}</span></td>
             `;
             tableBody.appendChild(tr);
         });
