@@ -472,28 +472,64 @@
 
             if (totalPages <= 1) return;
 
-            // Prev
-            const prevBtn = document.createElement('button');
-            prevBtn.innerText = '이전';
-            prevBtn.className = `px-3 py-1 rounded-md text-sm ${currentPage === 1 ? 'text-gray-600 cursor-not-allowed' : 'text-gray-300 hover:bg-accent hover:text-white'}`;
-            prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); } };
-            container.appendChild(prevBtn);
-
-            // Pages
-            for (let i = 1; i <= totalPages; i++) {
+            // Helper: Add Button
+            const addBtn = (content, onClick, active = false, disabled = false) => {
                 const btn = document.createElement('button');
-                btn.innerText = i;
-                btn.className = `w-8 h-8 rounded-md text-sm transition ${i === currentPage ? 'bg-accent text-white font-bold' : 'text-gray-400 hover:bg-white/10'}`;
-                btn.onclick = () => { currentPage = i; renderTable(); };
+                btn.innerHTML = content;
+                btn.disabled = disabled;
+                if (active) {
+                    btn.className = 'w-10 h-10 rounded-xl bg-accent text-white font-bold shadow-lg shadow-accent/20 flex items-center justify-center transition-all duration-300';
+                } else if (disabled) {
+                    btn.className = 'w-10 h-10 rounded-xl text-gray-600 cursor-not-allowed flex items-center justify-center';
+                } else {
+                    btn.className = 'w-10 h-10 rounded-xl text-gray-400 hover:bg-white/10 hover:text-white flex items-center justify-center transition-all duration-300';
+                }
+                btn.onclick = onClick;
                 container.appendChild(btn);
+            };
+
+            // Prev Button
+            addBtn('<i data-lucide="chevron-left" class="w-5 h-5"></i>', () => { 
+                if (currentPage > 1) { currentPage--; renderTable(); } 
+            }, false, currentPage === 1);
+
+            // Logic to show a subset of pages
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
             }
 
-            // Next
-            const nextBtn = document.createElement('button');
-            nextBtn.innerText = '다음';
-            nextBtn.className = `px-3 py-1 rounded-md text-sm ${currentPage === totalPages ? 'text-gray-600 cursor-not-allowed' : 'text-gray-300 hover:bg-accent hover:text-white'}`;
-            nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); } };
-            container.appendChild(nextBtn);
+            if (startPage > 1) {
+                addBtn('1', () => { currentPage = 1; renderTable(); });
+                if (startPage > 2) {
+                    const dot = document.createElement('span');
+                    dot.innerText = '...';
+                    dot.className = 'text-gray-600 px-1';
+                    container.appendChild(dot);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                addBtn(i, () => { currentPage = i; renderTable(); }, i === currentPage);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dot = document.createElement('span');
+                    dot.innerText = '...';
+                    dot.className = 'text-gray-600 px-1';
+                    container.appendChild(dot);
+                }
+                addBtn(totalPages, () => { currentPage = totalPages; renderTable(); });
+            }
+
+            // Next Button
+            addBtn('<i data-lucide="chevron-right" class="w-5 h-5"></i>', () => { 
+                if (currentPage < totalPages) { currentPage++; renderTable(); } 
+            }, false, currentPage === totalPages);
+
+            lucide.createIcons();
         }
 
         function sortTable(key) {
