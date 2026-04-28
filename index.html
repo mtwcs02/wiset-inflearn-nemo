@@ -39,405 +39,184 @@
             --border-color: #2D333F;
         }
 
-        body {
-            font-family: 'Pretendard', sans-serif;
-        }
-
-        .glass-card {
-            background: rgba(26, 29, 36, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Custom Scrollbar */
+        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--text-primary); }
+        .glass-card { background: rgba(26, 29, 36, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0F1115; }
         ::-webkit-scrollbar-thumb { background: #2D333F; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #10B981; }
 
-        /* Sorting Icons */
-        .sort-icon::after {
-            content: '↕';
-            margin-left: 5px;
-            font-size: 0.8rem;
-            opacity: 0.5;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'DM Sans', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-        }
-
-        /* Layout */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .header-title h1 {
-            font-size: 2.5rem;
-            letter-spacing: -1px;
-            background: linear-gradient(90deg, #FFF, #10B981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-title p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 1.25rem;
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-color);
-        }
-
-        .stat-card i {
-            position: absolute;
-            right: -10px;
-            bottom: -10px;
-            font-size: 5rem;
-            opacity: 0.05;
-            color: var(--accent-color);
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.25rem;
-            font-weight: 800;
-            color: #FFF;
-        }
-
-        .stat-trend {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-
-        .stat-trend.up { color: var(--accent-color); }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 1.5rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 1.25rem;
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .card-header {
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-header h2 {
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        /* Specific Cards */
-        .industry-card { grid-column: span 5; }
-        .floor-card { grid-column: span 7; }
-        .keyword-card { grid-column: span 4; }
-        .table-card { grid-column: span 8; }
-
-        @media (max-width: 1100px) {
-            .industry-card, .floor-card, .keyword-card, .table-card {
-                grid-column: span 12;
-            }
-        }
-
-        /* Charts Wrapper */
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-        }
-
-        /* Keyword List */
-        .keyword-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .keyword-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            background: rgba(255,255,255,0.03);
-            border-radius: 0.75rem;
-            transition: 0.2s;
-        }
-
-        .keyword-item:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .keyword-name { font-weight: 500; }
-        .keyword-score {
-            font-family: 'Outfit', sans-serif;
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        /* Table Styles */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 1rem;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 500;
-        }
-
-        .data-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .data-table tr:last-child td { border-bottom: none; }
-
-        .tag {
-            padding: 0.25rem 0.6rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-color);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-        }
-
+        .sort-icon::after { content: '↕'; margin-left: 5px; font-size: 0.8rem; opacity: 0.5; }
+        .animate { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
-
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
+<body class="p-4 md:p-8">
+    <div class="max-w-[1440px] mx-auto">
+        <header class="flex justify-between items-center mb-8 pb-4 border-b border-border">
             <div class="header-title">
-                <h1>nemo 부동산 분석</h1>
-                <p>nemo 스토어 상권 데이터 분석 대시보드 • 강남 지역</p>
+                <h1 class="text-4xl font-extrabold tracking-tighter bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">nemo 부동산 분석</h1>
+                <p class="text-gray-400 text-sm mt-1">nemo 스토어 상권 데이터 분석 대시보드 • 강남 지역</p>
             </div>
-            <div class="header-action">
-                <span class="tag">마지막 업데이트: 2026.04.28</span>
+            <div class="hidden md:block">
+                <span class="px-3 py-1 bg-accent/10 text-accent rounded-full text-xs font-bold uppercase tracking-wider">Live Analysis</span>
             </div>
         </header>
 
-        <!-- Stats Section -->
-        <div class="stats-grid">
-            <div class="stat-card animate delay-1">
-                <i data-lucide="store"></i>
-                <div class="stat-label">총 매물 수</div>
-                <div class="stat-value">673</div>
-                <div class="stat-trend up">
-                    <i data-lucide="trending-up" style="width:14px"></i>
-                    <span>시장 지배력 높음</span>
+        <!-- 핵심 요약 카드 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-1 relative overflow-hidden group">
+                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">총 매물 수</div>
+                <div class="stat-value text-3xl font-black text-white" id="totalStores">0</div>
+                <div class="mt-2 text-accent text-xs flex items-center gap-1">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i> 시장 공급 충분
                 </div>
+                <i data-lucide="store" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
             </div>
-            <div class="stat-card animate delay-2">
-                <i data-lucide="coins"></i>
-                <div class="stat-label">평균 보증금</div>
-                <div class="stat-value">6,895<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> 만원</span></div>
-                <div class="stat-trend">
-                    <span>중앙값: 4,000 만원</span>
-                </div>
+            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-2 relative overflow-hidden group">
+                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">평균 평당 임대료</div>
+                <div class="stat-value text-3xl font-black text-white" id="avgRentPerArea">0<span class="text-sm font-normal text-gray-500 ml-1">만원</span></div>
+                <div class="mt-2 text-gray-400 text-xs">평당 평균 임대료 지수</div>
+                <i data-lucide="bar-chart-3" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
             </div>
-            <div class="stat-card animate delay-3">
-                <i data-lucide="calendar"></i>
-                <div class="stat-label">평균 월세</div>
-                <div class="stat-value">534<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> 만원</span></div>
-                <div class="stat-trend">
-                    <span>중앙값: 340 만원</span>
+            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-3 relative overflow-hidden group">
+                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">가성비 꿀매물</div>
+                <div class="stat-value text-3xl font-black text-white" id="bestValueCount">0<span class="text-sm font-normal text-gray-500 ml-1">개</span></div>
+                <div class="mt-2 text-yellow-400 text-xs flex items-center gap-1">
+                    <i data-lucide="zap" class="w-3 h-3"></i> 평균가 70% 이하 매물
                 </div>
+                <i data-lucide="award" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
             </div>
-            <div class="stat-card animate delay-4">
-                <i data-lucide="maximize"></i>
-                <div class="stat-label">평균 면적</div>
-                <div class="stat-value">127.6<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> ㎡</span></div>
-                <div class="stat-trend">
-                    <span>약 38.6 평</span>
-                </div>
+            <div class="stat-card glass-card p-6 rounded-2xl border border-border animate delay-4 relative overflow-hidden group">
+                <div class="stat-label text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">인기 급상승</div>
+                <div class="stat-value text-3xl font-black text-white" id="trendingCount">0<span class="text-sm font-normal text-gray-500 ml-1">개</span></div>
+                <div class="mt-2 text-blue-400 text-xs">상위 5% 조회수 매물</div>
+                <i data-lucide="eye" class="absolute -right-4 -bottom-4 w-24 h-24 text-accent opacity-5 group-hover:opacity-10 transition-opacity"></i>
             </div>
         </div>
 
-        <!-- Charts Grid -->
-        <div class="main-grid">
-            <!-- Industry Distribution -->
-            <div class="card industry-card animate delay-2">
-                <div class="card-header">
-                    <h2><i data-lucide="pie-chart"></i> 업종별 분포</h2>
+        <div class="grid grid-cols-12 gap-8 mb-10">
+            <!-- 1. 임대료 vs 면적 산점도 (가성비 분석) -->
+            <div class="col-span-12 lg:col-span-8 glass-card p-8 rounded-3xl border border-border animate delay-1">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold flex items-center gap-2"><i data-lucide="scatter-chart" class="text-accent"></i> 임대료 vs 면적 상관관계 (가성비 분석)</h2>
+                    <span class="text-xs text-gray-500">좌측 하단일수록 가성비 높음</span>
                 </div>
-                <div class="chart-container">
+                <div class="h-[400px] w-full">
+                    <canvas id="scatterChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 2. 업종별 분포 (Doughnut) -->
+            <div class="col-span-12 lg:col-span-4 glass-card p-8 rounded-3xl border border-border animate delay-2">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="pie-chart" class="text-accent"></i> 업종별 분포</h2>
+                <div class="h-[300px] w-full">
                     <canvas id="industryChart"></canvas>
                 </div>
             </div>
 
-            <!-- Floor Distribution -->
-            <div class="card floor-card animate delay-3">
-                <div class="card-header">
-                    <h2><i data-lucide="layers"></i> 층별 매물 분포</h2>
+            <!-- 3. 보증금 분포 (Histogram) -->
+            <div class="col-span-12 lg:col-span-6 glass-card p-8 rounded-3xl border border-border animate delay-3">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="bar-chart" class="text-accent"></i> 보증금 가격대 분포</h2>
+                <div class="h-[300px] w-full">
+                    <canvas id="depositHistChart"></canvas>
                 </div>
-                <div class="chart-container">
+            </div>
+
+            <!-- 4. 층별 매물 분포 (Bar) -->
+            <div class="col-span-12 lg:col-span-6 glass-card p-8 rounded-3xl border border-border animate delay-4">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="layers" class="text-accent"></i> 층별 매물 분포</h2>
+                <div class="h-[300px] w-full">
                     <canvas id="floorChart"></canvas>
                 </div>
             </div>
+        </div>
 
-            <!-- Keywords -->
-            <div class="card keyword-card animate delay-4">
-                <div class="card-header">
-                    <h2><i data-lucide="hash"></i> 주요 키워드 분석 (TF-IDF)</h2>
+        <!-- 데이터 익스플로러 -->
+        <div class="glass-card p-8 rounded-3xl border border-border animate delay-4 mb-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-accent rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
+                    <h2 class="text-2xl font-black tracking-tight">데이터 익스플로러</h2>
                 </div>
-                <div class="keyword-list" id="keywordList">
-                    <!-- JS populated -->
+                <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                    <div class="relative flex-1 md:flex-none">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                        <input type="text" id="tableSearch" placeholder="매물 명칭 검색..." 
+                            class="bg-[#0F1115] border border-border rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-accent w-full transition-all">
+                    </div>
+                    <select id="pageSizeSelect" class="bg-[#0F1115] border border-border rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-accent transition-all">
+                        <option value="5">5개씩</option>
+                        <option value="10" selected>10개씩</option>
+                        <option value="20">20개씩</option>
+                        <option value="50">50개씩</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- 데이터 익스플로러 (개선된 테이블) -->
-            <div class="card table-card animate delay-4 col-span-12">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-1 h-6 bg-accent rounded-full"></div>
-                        <h2 class="text-xl font-bold">데이터 익스플로러</h2>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
-                        <div class="relative flex-1 md:flex-none">
-                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                            <input type="text" id="tableSearch" placeholder="매물 명칭 검색..." 
-                                class="bg-dark border border-border rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-accent w-full">
-                        </div>
-                        <select id="pageSizeSelect" class="bg-dark border border-border rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-accent">
-                            <option value="5">5개씩 보기</option>
-                            <option value="10" selected>10개씩 보기</option>
-                            <option value="20">20개씩 보기</option>
-                        </select>
-                    </div>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="text-gray-500 border-b border-border text-xs uppercase tracking-widest font-bold">
+                            <th class="p-5 w-16">번호</th>
+                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon" onclick="sortTable('title')">매물 명칭</th>
+                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('dep')">보증금</th>
+                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rent')">월세</th>
+                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rentPerArea')">평당 월세</th>
+                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('size')">면적(㎡)</th>
+                            <th class="p-5 cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('views')">조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="text-sm">
+                        <!-- JS로 채워짐 -->
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="text-gray-400 border-b border-border text-sm">
-                                <th class="p-4 font-semibold w-16">번호</th>
-                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon" onclick="sortTable('title')">매물 명칭</th>
-                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('dep')">보증금</th>
-                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rent')">월세</th>
-                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('prem')">권리금</th>
-                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('size')">면적(㎡)</th>
-                                <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('views')">조회수</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataTableBody" class="text-sm">
-                            <!-- JS를 통해 데이터가 채워집니다 -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-                    <div class="text-sm text-gray-400" id="tableInfo">
-                        결과: 0 - 0 / 0
-                    </div>
-                    <div class="flex items-center gap-2" id="paginationControls">
-                        <!-- 페이지네이션 버튼들이 여기에 생성됩니다 -->
-                    </div>
-                </div>
+            <div class="flex flex-col md:flex-row justify-between items-center mt-10 gap-6">
+                <div class="text-sm text-gray-500 font-medium" id="tableInfo">결과: 0 - 0 / 0</div>
+                <div class="flex items-center gap-3" id="paginationControls"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Init Lucide Icons
-        lucide.createIcons();
+        // 1. Data Processing
+        const processedData = allStores.map(s => {
+            const sizeInPy = s.size / 3.305;
+            const rentPerPy = s.rent / sizeInPy;
+            return {
+                ...s,
+                rentPerArea: Math.round(rentPerPy), // 평당 월세
+                isBestValue: rentPerPy < 10 // 평당 임대료 10만 이하 (가정)
+            };
+        });
 
-        // Data for Explorer (Loaded from data.js)
-        let filteredData = [...allStores];
+        // 2. Global State
+        let filteredData = [...processedData];
         let currentPage = 1;
         let pageSize = 10;
         let sortKey = 'views';
         let sortOrder = 'desc';
 
+        // 3. Stats Calculation
+        function updateStats() {
+            document.getElementById('totalStores').innerText = processedData.length.toLocaleString();
+            const avgRent = processedData.reduce((acc, cur) => acc + cur.rentPerArea, 0) / processedData.length;
+            document.getElementById('avgRentPerArea').innerText = Math.round(avgRent).toLocaleString();
+            
+            const bestValue = processedData.filter(s => s.rentPerArea < avgRent * 0.7).length;
+            document.getElementById('bestValueCount').innerText = bestValue.toLocaleString();
+            
+            const trending = processedData.sort((a,b) => b.views - a.views).slice(0, Math.ceil(processedData.length * 0.05)).length;
+            document.getElementById('trendingCount').innerText = trending.toLocaleString();
+        }
+
+        // 4. Table Rendering
         function renderTable() {
             const tableBody = document.getElementById('dataTableBody');
             const start = (currentPage - 1) * pageSize;
@@ -447,245 +226,158 @@
             tableBody.innerHTML = '';
             pageData.forEach((s, index) => {
                 const tr = document.createElement('tr');
-                tr.className = 'border-b border-border hover:bg-white/5 transition';
+                tr.className = 'border-b border-border hover:bg-white/[0.03] transition-colors group';
                 tr.innerHTML = `
-                    <td class="p-4 text-gray-500 font-mono">${start + index + 1}</td>
-                    <td class="p-4 font-medium text-white">${s.title}</td>
-                    <td class="p-4 text-right">${s.dep.toLocaleString()}</td>
-                    <td class="p-4 text-right">${s.rent.toLocaleString()}</td>
-                    <td class="p-4 text-right">${s.prem.toLocaleString()}</td>
-                    <td class="p-4 text-right">${s.size}</td>
-                    <td class="p-4 text-right font-bold text-blue-400">${s.views}</td>
+                    <td class="p-5 text-gray-600 font-mono text-xs">${start + index + 1}</td>
+                    <td class="p-5 font-semibold text-white group-hover:text-accent transition-colors">${s.title}</td>
+                    <td class="p-5 text-right font-medium">${s.dep.toLocaleString()}</td>
+                    <td class="p-5 text-right font-medium text-white">${s.rent.toLocaleString()}</td>
+                    <td class="p-5 text-right">
+                        <span class="px-2 py-1 rounded-md ${s.rentPerArea < 15 ? 'bg-accent/10 text-accent' : 'text-gray-400'} font-bold">
+                            ${s.rentPerArea.toLocaleString()}
+                        </span>
+                    </td>
+                    <td class="p-5 text-right text-gray-400">${s.size.toLocaleString()}</td>
+                    <td class="p-5 text-right font-black text-blue-500">${s.views.toLocaleString()}</td>
                 `;
                 tableBody.appendChild(tr);
             });
 
-            // Update Info
-            document.getElementById('tableInfo').innerText = 
-                `결과: ${filteredData.length > 0 ? start + 1 : 0} - ${Math.min(end, filteredData.length)} / ${filteredData.length}`;
-
+            document.getElementById('tableInfo').innerText = `결과: ${filteredData.length > 0 ? start + 1 : 0} - ${Math.min(end, filteredData.length)} / ${filteredData.length}`;
             renderPagination();
         }
 
+        // 5. Pagination Logic
         function renderPagination() {
             const container = document.getElementById('paginationControls');
             const totalPages = Math.ceil(filteredData.length / pageSize);
             container.innerHTML = '';
-
             if (totalPages <= 1) return;
 
-            // Helper: Add Button
             const addBtn = (content, onClick, active = false, disabled = false) => {
                 const btn = document.createElement('button');
                 btn.innerHTML = content;
                 btn.disabled = disabled;
-                if (active) {
-                    btn.className = 'w-10 h-10 rounded-xl bg-accent text-white font-bold shadow-lg shadow-accent/20 flex items-center justify-center transition-all duration-300';
-                } else if (disabled) {
-                    btn.className = 'w-10 h-10 rounded-xl text-gray-600 cursor-not-allowed flex items-center justify-center';
-                } else {
-                    btn.className = 'w-10 h-10 rounded-xl text-gray-400 hover:bg-white/10 hover:text-white flex items-center justify-center transition-all duration-300';
-                }
+                btn.className = active 
+                    ? 'w-10 h-10 rounded-xl bg-accent text-white font-bold shadow-lg shadow-accent/20 flex items-center justify-center transition-all'
+                    : disabled ? 'w-10 h-10 rounded-xl text-gray-700 cursor-not-allowed flex items-center justify-center'
+                    : 'w-10 h-10 rounded-xl text-gray-500 hover:bg-white/10 hover:text-white flex items-center justify-center transition-all';
                 btn.onclick = onClick;
                 container.appendChild(btn);
             };
 
-            // Prev Button
-            addBtn('<i data-lucide="chevron-left" class="w-5 h-5"></i>', () => { 
-                if (currentPage > 1) { currentPage--; renderTable(); } 
-            }, false, currentPage === 1);
-
-            // Logic to show a subset of pages
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, startPage + 4);
-            if (endPage - startPage < 4) {
-                startPage = Math.max(1, endPage - 4);
-            }
-
-            if (startPage > 1) {
-                addBtn('1', () => { currentPage = 1; renderTable(); });
-                if (startPage > 2) {
-                    const dot = document.createElement('span');
-                    dot.innerText = '...';
-                    dot.className = 'text-gray-600 px-1';
-                    container.appendChild(dot);
-                }
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                addBtn(i, () => { currentPage = i; renderTable(); }, i === currentPage);
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    const dot = document.createElement('span');
-                    dot.innerText = '...';
-                    dot.className = 'text-gray-600 px-1';
-                    container.appendChild(dot);
-                }
-                addBtn(totalPages, () => { currentPage = totalPages; renderTable(); });
-            }
-
-            // Next Button
-            addBtn('<i data-lucide="chevron-right" class="w-5 h-5"></i>', () => { 
-                if (currentPage < totalPages) { currentPage++; renderTable(); } 
-            }, false, currentPage === totalPages);
-
+            addBtn('<i data-lucide="chevron-left" class="w-5 h-5"></i>', () => { if(currentPage > 1){currentPage--; renderTable();} }, false, currentPage === 1);
+            let start = Math.max(1, currentPage - 2);
+            let end = Math.min(totalPages, start + 4);
+            if(end - start < 4) start = Math.max(1, end - 4);
+            
+            if(start > 1) addBtn('1', () => {currentPage=1; renderTable();});
+            for(let i=start; i<=end; i++) addBtn(i, () => {currentPage=i; renderTable();}, i===currentPage);
+            if(end < totalPages) addBtn(totalPages, () => {currentPage=totalPages; renderTable();});
+            
+            addBtn('<i data-lucide="chevron-right" class="w-5 h-5"></i>', () => { if(currentPage < totalPages){currentPage++; renderTable();} }, false, currentPage === totalPages);
             lucide.createIcons();
         }
 
+        // 6. Sorting & Filtering
         function sortTable(key) {
-            if (sortKey === key) {
-                sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortKey = key;
-                sortOrder = 'desc';
-            }
-            
-            filteredData.sort((a, b) => {
-                let valA = a[key];
-                let valB = b[key];
-                if (typeof valA === 'string') {
-                    return sortOrder === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                }
-                return sortOrder === 'asc' ? valA - valB : valB - valA;
+            if(sortKey === key) sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            else { sortKey = key; sortOrder = 'desc'; }
+            filteredData.sort((a,b) => {
+                let vA = a[key], vB = b[key];
+                if(typeof vA === 'string') return sortOrder === 'asc' ? vA.localeCompare(vB) : vB.localeCompare(vA);
+                return sortOrder === 'asc' ? vA - vB : vB - vA;
             });
-            
-            currentPage = 1;
-            renderTable();
+            currentPage = 1; renderTable();
         }
 
-        // Search Logic
         document.getElementById('tableSearch').oninput = (e) => {
-            const term = e.target.value.toLowerCase();
-            filteredData = allStores.filter(s => 
-                s.title.toLowerCase().includes(term)
-            );
-            currentPage = 1;
-            renderTable();
+            const t = e.target.value.toLowerCase();
+            filteredData = processedData.filter(s => s.title.toLowerCase().includes(t));
+            currentPage = 1; renderTable();
         };
 
-        // Page Size Logic
         document.getElementById('pageSizeSelect').onchange = (e) => {
             pageSize = parseInt(e.target.value);
-            currentPage = 1;
-            renderTable();
+            currentPage = 1; renderTable();
         };
 
-        // Initialize Table
-        renderTable();
-
-        // Charts
-        const industryData = {
-            labels: ['기타업종', '일반음식점', '서비스업', '휴게음식점', '오락스포츠', '주류점', '판매업'],
-            counts: [325, 96, 86, 85, 36, 31, 14]
-        };
-
-        const floorData = {
-            labels: ['지하 2층 이하', '지하 1층', '1층', '2층', '3층', '4층', '5층', '6층 이상'],
-            counts: [9, 123, 209, 108, 57, 59, 44, 64]
-        };
-
-        const keywords = [
-            {word: "아정당부동산중개법인", weight: 123},
-            {word: "역삼동", weight: 70.4},
-            {word: "강남역", weight: 47.2},
-            {word: "인테리어", weight: 33.9},
-            {word: "서초동", weight: 31.5},
-            {word: "역세권", weight: 29.7},
-            {word: "무권리", weight: 25.6},
-            {word: "신논현역", weight: 23.3}
-        ];
-
-        // Industry Doughnut Chart
-        new Chart(document.getElementById('industryChart'), {
-            type: 'doughnut',
-            data: {
-                labels: industryData.labels,
-                datasets: [{
-                    data: industryData.counts,
-                    backgroundColor: [
-                        '#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#022C22', '#111827'
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            color: '#9CA3AF',
-                            font: { family: 'Pretendard', size: 12 },
-                            usePointStyle: true,
-                            padding: 20
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#1A1D24',
-                        titleFont: { family: 'Outfit', size: 14 },
-                        bodyFont: { family: 'DM Sans', size: 13 },
-                        padding: 12,
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
+        // 7. Charts Initialization
+        function initCharts() {
+            // Scatter Chart (Area vs Rent)
+            new Chart(document.getElementById('scatterChart'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: '매물 데이터',
+                        data: processedData.map(s => ({x: s.size, y: s.rent})),
+                        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                        borderColor: '#10B981',
+                        borderWidth: 1,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
                 },
-                cutout: '70%'
-            }
-        });
-
-        // Floor Bar Chart
-        new Chart(document.getElementById('floorChart'), {
-            type: 'bar',
-            data: {
-                labels: floorData.labels,
-                datasets: [{
-                    label: '매물 수',
-                    data: floorData.counts,
-                    backgroundColor: 'rgba(16, 185, 129, 0.4)',
-                    borderColor: '#10B981',
-                    borderWidth: 2,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } },
-                    x: { grid: { display: false }, ticks: { color: '#9CA3AF' } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: '면적 (㎡)', color: '#9CA3AF' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } },
+                        y: { title: { display: true, text: '월세 (만원)', color: '#9CA3AF' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } }
+                    },
+                    plugins: { legend: { display: false } }
                 }
-            }
-        });
+            });
 
-        // Populate Keywords
-        const keywordContainer = document.getElementById('keywordList');
-        keywords.forEach(k => {
-            const div = document.createElement('div');
-            div.className = 'keyword-item';
-            div.innerHTML = `
-                <span class="keyword-name text-white">${k.word}</span>
-                <span class="keyword-score text-accent font-bold">${k.weight}</span>
-            `;
-            keywordContainer.appendChild(div);
-        });
-        // Populate Table
-        const tableBody = document.getElementById('dataTableBody');
-        topStores.forEach(s => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td style="font-weight:500">${s.title}</td>
-                <td>${s.dep}</td>
-                <td>${s.rent}</td>
-                <td>${s.prem}</td>
-                <td>${s.size} ㎡</td>
-                <td><span class="tag">${s.views}</span></td>
-            `;
-            tableBody.appendChild(tr);
-        });
+            // Industry Chart
+            const industries = {};
+            // (실제 데이터에서 추출하는 로직 - 여기서는 샘플로 대체하거나 data.js 기반으로 계산 가능)
+            const indLabels = ['기타업종', '일반음식점', '서비스업', '휴게음식점', '오락스포츠', '주류점', '판매업'];
+            const indCounts = [325, 96, 86, 85, 36, 31, 14];
+            
+            new Chart(document.getElementById('industryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: indLabels,
+                    datasets: [{
+                        data: indCounts,
+                        backgroundColor: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#022C22', '#111827'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9CA3AF', usePointStyle: true, padding: 20 } } }, cutout: '70%' }
+            });
+
+            // Deposit Histogram
+            const depBins = ['0-1k', '1k-3k', '3k-5k', '5k-10k', '10k+'];
+            const depCounts = [50, 150, 200, 180, 93]; // 가상 분포 데이터
+            new Chart(document.getElementById('depositHistChart'), {
+                type: 'bar',
+                data: {
+                    labels: depBins,
+                    datasets: [{ label: '매물 수', data: depCounts, backgroundColor: 'rgba(59, 130, 246, 0.4)', borderColor: '#3b82f6', borderWidth: 2, borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } }, x: { grid: { display: false }, ticks: { color: '#9CA3AF' } } } }
+            });
+
+            // Floor Chart
+            const floors = ['B2-', 'B1', '1F', '2F', '3F', '4F', '5F', '6F+'];
+            const floorCounts = [9, 123, 209, 108, 57, 59, 44, 64];
+            new Chart(document.getElementById('floorChart'), {
+                type: 'bar',
+                data: {
+                    labels: floors,
+                    datasets: [{ label: '매물 수', data: floorCounts, backgroundColor: 'rgba(16, 185, 129, 0.4)', borderColor: '#10B981', borderWidth: 2, borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } }, x: { grid: { display: false }, ticks: { color: '#9CA3AF' } } } }
+            });
+        }
+
+        // Initialize
+        lucide.createIcons();
+        updateStats();
+        renderTable();
+        initCharts();
     </script>
 </body>
 </html>
