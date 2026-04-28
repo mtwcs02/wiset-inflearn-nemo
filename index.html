@@ -400,6 +400,7 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="text-gray-400 border-b border-border text-sm">
+                                <th class="p-4 font-semibold w-16">번호</th>
                                 <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon" onclick="sortTable('title')">매물 명칭</th>
                                 <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('dep')">보증금</th>
                                 <th class="p-4 font-semibold cursor-pointer hover:text-accent transition sort-icon text-right" onclick="sortTable('rent')">월세</th>
@@ -444,10 +445,11 @@
             const pageData = filteredData.slice(start, end);
 
             tableBody.innerHTML = '';
-            pageData.forEach(s => {
+            pageData.forEach((s, index) => {
                 const tr = document.createElement('tr');
                 tr.className = 'border-b border-border hover:bg-white/5 transition';
                 tr.innerHTML = `
+                    <td class="p-4 text-gray-500 font-mono">${start + index + 1}</td>
                     <td class="p-4 font-medium text-white">${s.title}</td>
                     <td class="p-4 text-right">${s.dep.toLocaleString()}</td>
                     <td class="p-4 text-right">${s.rent.toLocaleString()}</td>
