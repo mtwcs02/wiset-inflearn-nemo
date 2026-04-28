@@ -119,12 +119,12 @@
                     <thead>
                         <tr class="text-gray-500 text-[10px] uppercase font-bold border-b border-border">
                             <th class="p-4 w-16">#</th>
-                            <th class="p-4 cursor-pointer hover:text-accent transition-colors" onclick="handleSort('title')">매물 명칭</th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('dep')">보증금</th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rent')">월세</th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rentPy')">평당월세</th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('size')">면적(㎡)</th>
-                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-28" onclick="handleSort('views')">조회수</th>
+                            <th class="p-4 cursor-pointer hover:text-accent transition-colors" onclick="handleSort('title')">매물 명칭 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('title')}</span></th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('dep')">보증금 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('dep')}</span></th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rent')">월세 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('rent')}</span></th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rentPy')">평당월세 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('rentPy')}</span></th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('size')">면적 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('size')}</span></th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-28" onclick="handleSort('views')">조회수 <span class="ml-1 text-[8px] opacity-30">${getSortIcon('views')}</span></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
@@ -193,6 +193,11 @@
             updateUI();
         }
 
+        function getSortIcon(key) {
+            if (sortConfig.key !== key) return '↕';
+            return sortConfig.direction === 'asc' ? '▲' : '▼';
+        }
+
         function updateUI() {
             // Sort
             if (sortConfig.key) {
@@ -232,15 +237,11 @@
                             <span class="text-[10px] text-accent/70 font-medium">${s.category} • ${s.floor}</span>
                         </div>
                     </td>
-                    <td class="p-4 text-right font-bold text-white/80 num-align text-sm">${s.dep.toLocaleString()}</td>
-                    <td class="p-4 text-right font-bold text-white/80 num-align text-sm">${s.rent.toLocaleString()}</td>
-                    <td class="p-4 text-right">
-                        <span class="px-2 py-0.5 rounded text-[11px] font-bold num-align inline-block min-w-[40px] text-center ${s.rentPy < avg*0.7 ? 'bg-accent/10 text-accent' : 'text-gray-500'}">
-                            ${s.rentPy.toLocaleString()}
-                        </span>
-                    </td>
-                    <td class="p-4 text-right num-align text-gray-500 text-sm">${s.size.toFixed(1)}</td>
-                    <td class="p-4 text-right num-align text-white/20 text-sm group-hover:text-white/50 transition-colors">${s.views.toLocaleString()}</td>
+                    <td class="p-4 text-right font-medium text-gray-300 num-align text-sm">${s.dep.toLocaleString()}</td>
+                    <td class="p-4 text-right font-medium text-gray-300 num-align text-sm">${s.rent.toLocaleString()}</td>
+                    <td class="p-4 text-right font-medium num-align text-sm ${s.rentPy < avg*0.7 ? 'text-accent' : 'text-gray-300'}">${s.rentPy.toLocaleString()}</td>
+                    <td class="p-4 text-right font-medium text-gray-300 num-align text-sm">${s.size.toFixed(1)}</td>
+                    <td class="p-4 text-right font-medium text-gray-400/50 num-align text-sm group-hover:text-white/50 transition-colors">${s.views.toLocaleString()}</td>
                 </tr>
             `).join('');
 
