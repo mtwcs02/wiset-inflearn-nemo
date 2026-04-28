@@ -118,13 +118,13 @@
                 <table class="w-full text-left">
                     <thead>
                         <tr class="text-gray-500 text-[10px] uppercase font-bold border-b border-border">
-                            <th class="p-4">#</th>
-                            <th class="p-4">매물 명칭</th>
-                            <th class="p-4 text-right">보증금</th>
-                            <th class="p-4 text-right">월세</th>
-                            <th class="p-4 text-right">평당월세</th>
-                            <th class="p-4 text-right">면적(㎡)</th>
-                            <th class="p-4 text-right">조회수</th>
+                            <th class="p-4 w-16">#</th>
+                            <th class="p-4 cursor-pointer hover:text-accent transition-colors" onclick="handleSort('title')">매물 명칭</th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('dep')">보증금</th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rent')">월세</th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('rentPy')">평당월세</th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-32" onclick="handleSort('size')">면적(㎡)</th>
+                            <th class="p-4 text-right cursor-pointer hover:text-accent transition-colors w-28" onclick="handleSort('views')">조회수</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
@@ -181,8 +181,29 @@
         let filtered = [...processedData];
         let page = 1;
         let size = 10;
+        let sortConfig = { key: null, direction: 'desc' };
+
+        function handleSort(key) {
+            if (sortConfig.key === key) {
+                sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortConfig.key = key;
+                sortConfig.direction = 'desc';
+            }
+            updateUI();
+        }
 
         function updateUI() {
+            // Sort
+            if (sortConfig.key) {
+                filtered.sort((a, b) => {
+                    const v1 = a[sortConfig.key];
+                    const v2 = b[sortConfig.key];
+                    if (sortConfig.direction === 'asc') return v1 > v2 ? 1 : -1;
+                    return v1 < v2 ? 1 : -1;
+                });
+            }
+
             // Stats
             const total = processedData.length;
             const avg = Math.round(processedData.reduce((a,b)=>a+b.rentPy, 0)/total);
@@ -211,11 +232,15 @@
                             <span class="text-[10px] text-accent/70 font-medium">${s.category} • ${s.floor}</span>
                         </div>
                     </td>
-                    <td class="p-4 text-right num-align">${s.dep.toLocaleString()}</td>
-                    <td class="p-4 text-right num-align">${s.rent.toLocaleString()}</td>
-                    <td class="p-4 text-right"><span class="px-2 py-0.5 rounded text-xs num-align ${s.rentPy < avg*0.7 ? 'bg-accent/10 text-accent' : 'text-gray-500'}">${s.rentPy.toLocaleString()}</span></td>
-                    <td class="p-4 text-right num-align text-gray-500">${s.size.toFixed(1)}</td>
-                    <td class="p-4 text-right num-align text-white/20 group-hover:text-white/50">${s.views.toLocaleString()}</td>
+                    <td class="p-4 text-right font-bold text-white/80 num-align text-sm">${s.dep.toLocaleString()}</td>
+                    <td class="p-4 text-right font-bold text-white/80 num-align text-sm">${s.rent.toLocaleString()}</td>
+                    <td class="p-4 text-right">
+                        <span class="px-2 py-0.5 rounded text-[11px] font-bold num-align inline-block min-w-[40px] text-center ${s.rentPy < avg*0.7 ? 'bg-accent/10 text-accent' : 'text-gray-500'}">
+                            ${s.rentPy.toLocaleString()}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right num-align text-gray-500 text-sm">${s.size.toFixed(1)}</td>
+                    <td class="p-4 text-right num-align text-white/20 text-sm group-hover:text-white/50 transition-colors">${s.views.toLocaleString()}</td>
                 </tr>
             `).join('');
 
