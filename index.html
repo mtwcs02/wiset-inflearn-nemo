@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nemo Stores Analytics Dashboard</title>
+    <title>니모 부동산 데이터 분석 대시보드</title>
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -257,11 +257,11 @@
     <div class="container">
         <header>
             <div class="header-title">
-                <h1>Nemo Analytics</h1>
-                <p>Nemo Stores Market Data Analysis Dashboard • Gangnam Area</p>
+                <h1>니모 부동산 분석</h1>
+                <p>니모 스토어 상권 데이터 분석 대시보드 • 강남 지역</p>
             </div>
             <div class="header-action">
-                <span class="tag">Last Updated: 2026.04.28</span>
+                <span class="tag">마지막 업데이트: 2026.04.28</span>
             </div>
         </header>
 
@@ -269,35 +269,35 @@
         <div class="stats-grid">
             <div class="stat-card animate delay-1">
                 <i data-lucide="store"></i>
-                <div class="stat-label">Total Stores</div>
+                <div class="stat-label">총 매물 수</div>
                 <div class="stat-value">673</div>
                 <div class="stat-trend up">
                     <i data-lucide="trending-up" style="width:14px"></i>
-                    <span>Market Dominance High</span>
+                    <span>시장 지배력 높음</span>
                 </div>
             </div>
             <div class="stat-card animate delay-2">
                 <i data-lucide="coins"></i>
-                <div class="stat-label">Avg. Deposit</div>
+                <div class="stat-label">평균 보증금</div>
                 <div class="stat-value">6,895<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> 만원</span></div>
                 <div class="stat-trend">
-                    <span>Median: 4,000 만원</span>
+                    <span>중앙값: 4,000 만원</span>
                 </div>
             </div>
             <div class="stat-card animate delay-3">
                 <i data-lucide="calendar"></i>
-                <div class="stat-label">Avg. Monthly Rent</div>
+                <div class="stat-label">평균 월세</div>
                 <div class="stat-value">534<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> 만원</span></div>
                 <div class="stat-trend">
-                    <span>Median: 340 만원</span>
+                    <span>중앙값: 340 만원</span>
                 </div>
             </div>
             <div class="stat-card animate delay-4">
                 <i data-lucide="maximize"></i>
-                <div class="stat-label">Avg. Size</div>
+                <div class="stat-label">평균 면적</div>
                 <div class="stat-value">127.6<span style="font-size:1rem; font-weight:400; color:var(--text-secondary)"> ㎡</span></div>
                 <div class="stat-trend">
-                    <span>Approx. 38.6 평</span>
+                    <span>약 38.6 평</span>
                 </div>
             </div>
         </div>
@@ -307,7 +307,7 @@
             <!-- Industry Distribution -->
             <div class="card industry-card animate delay-2">
                 <div class="card-header">
-                    <h2><i data-lucide="pie-chart"></i> Industry Distribution</h2>
+                    <h2><i data-lucide="pie-chart"></i> 업종별 분포</h2>
                 </div>
                 <div class="chart-container">
                     <canvas id="industryChart"></canvas>
@@ -317,7 +317,7 @@
             <!-- Floor Distribution -->
             <div class="card floor-card animate delay-3">
                 <div class="card-header">
-                    <h2><i data-lucide="layers"></i> Floor Distribution</h2>
+                    <h2><i data-lucide="layers"></i> 층별 매물 분포</h2>
                 </div>
                 <div class="chart-container">
                     <canvas id="floorChart"></canvas>
@@ -327,7 +327,7 @@
             <!-- Keywords -->
             <div class="card keyword-card animate delay-4">
                 <div class="card-header">
-                    <h2><i data-lucide="hash"></i> Top TF-IDF Keywords</h2>
+                    <h2><i data-lucide="hash"></i> 주요 키워드 분석 (TF-IDF)</h2>
                 </div>
                 <div class="keyword-list" id="keywordList">
                     <!-- JS populated -->
@@ -337,17 +337,17 @@
             <!-- Data Table -->
             <div class="card table-card animate delay-4">
                 <div class="card-header">
-                    <h2><i data-lucide="list"></i> Top Viewed Listings</h2>
+                    <h2><i data-lucide="list"></i> 조회수 상위 매물</h2>
                 </div>
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Store Title</th>
-                            <th>Deposit</th>
-                            <th>Rent</th>
-                            <th>Premium</th>
-                            <th>Size</th>
-                            <th>Views</th>
+                            <th>매물 명칭</th>
+                            <th>보증금</th>
+                            <th>월세</th>
+                            <th>권리금</th>
+                            <th>면적</th>
+                            <th>조회수</th>
                         </tr>
                     </thead>
                     <tbody id="dataTableBody">
@@ -390,7 +390,9 @@
             {title: "인테리어 완비된 역삼동 고깃집", dep: "180,000", rent: "14,000", prem: "300,000", size: "115.7", views: "956"},
             {title: "강남역 점프 밀라노 방탈출 매장", dep: "40,000", rent: "3,800", prem: "130,000", size: "115.17", views: "943"},
             {title: "접근성 좋은 서초동 파티룸", dep: "10,000", rent: "1,350", prem: "5,000", size: "38.81", views: "940"},
-            {title: "테라스 돋보이는 깔끔한 상가", dep: "60,000", rent: "5,000", prem: "20,000", size: "109.09", views: "925"}
+            {title: "테라스 돋보이는 깔끔한 상가", dep: "60,000", rent: "5,000", prem: "20,000", size: "109.09", views: "925"},
+            {title: "역삼역 인근 대형 사무실", dep: "200,000", rent: "18,000", prem: "0", size: "250.5", views: "880"},
+            {title: "서초동 조용한 스터디 카페", dep: "5,000", rent: "250", prem: "10,000", size: "45.2", views: "850"}
         ];
 
         // Industry Doughnut Chart
@@ -439,7 +441,7 @@
             data: {
                 labels: floorData.labels,
                 datasets: [{
-                    label: 'Store Count',
+                    label: '매물 수',
                     data: floorData.counts,
                     backgroundColor: 'rgba(16, 185, 129, 0.4)',
                     borderColor: '#10B981',
