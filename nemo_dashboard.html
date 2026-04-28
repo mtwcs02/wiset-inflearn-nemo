@@ -62,15 +62,19 @@
                 <h2 class="text-lg font-bold mb-6 flex items-center gap-2"><i data-lucide="map-pin" class="w-5 h-5 text-accent"></i> 법정동별 평균 임대료</h2>
                 <div class="h-[400px]"><canvas id="dongChart"></canvas></div>
             </div>
-            <div class="col-span-12 md:col-span-4 glass-card p-6 rounded-3xl">
+            <div class="col-span-12 md:col-span-3 glass-card p-6 rounded-3xl">
                 <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i data-lucide="pie-chart" class="w-4 h-4 text-accent"></i> 업종별 분포</h2>
                 <div class="h-[200px]"><canvas id="industryChart"></canvas></div>
             </div>
-            <div class="col-span-12 md:col-span-4 glass-card p-6 rounded-3xl">
+            <div class="col-span-12 md:col-span-3 glass-card p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i data-lucide="bar-chart" class="w-4 h-4 text-accent"></i> 보증금 구간</h2>
+                <div class="h-[200px]"><canvas id="depHist"></canvas></div>
+            </div>
+            <div class="col-span-12 md:col-span-3 glass-card p-6 rounded-3xl">
                 <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-4 h-4 text-accent"></i> 월세 구간</h2>
                 <div class="h-[200px]"><canvas id="rentHist"></canvas></div>
             </div>
-            <div class="col-span-12 md:col-span-4 glass-card p-6 rounded-3xl">
+            <div class="col-span-12 md:col-span-3 glass-card p-6 rounded-3xl">
                 <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-accent"></i> 층별 분포</h2>
                 <div class="h-[200px]"><canvas id="floorChart"></canvas></div>
             </div>
@@ -183,9 +187,12 @@
             });
 
             const total = processedData.length;
+            if (total === 0) return;
+
             const avg = Math.round(processedData.reduce((a,b)=>a+b.rentPy, 0)/total);
             const best = processedData.filter(s=>s.rentPy < avg * 0.7).length;
-            const topViews = [...processedData].sort((a,b)=>b.views-a.views)[Math.floor(total*0.05)].views;
+            const sortedByViews = [...processedData].sort((a,b)=>b.views-a.views);
+            const topViews = sortedByViews.length > 0 ? sortedByViews[Math.floor(total*0.05)].views : 0;
             const trend = processedData.filter(s=>s.views >= topViews).length;
             const sub = ((processedData.filter(s=>s.isSubway).length / total)*100).toFixed(1);
 
@@ -399,7 +406,14 @@
             updateUI();
         });
 
-        window.onload = () => { updateUI(); initCharts(); };
+        window.onload = () => { 
+            try {
+                updateUI(); 
+                initCharts(); 
+            } catch (e) {
+                console.error("Initialization failed:", e);
+            }
+        };
     </script>
 </body>
 </html>
