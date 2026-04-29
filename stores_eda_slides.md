@@ -4,89 +4,96 @@ theme: default
 paginate: true
 header: 'Nemo Stores 상가 매물 데이터 심층 분석'
 footer: '© 2026 Nemo Stores 분석 리포트'
-backgroundColor: #F5F500
+backgroundColor: #F7F2E8
 style: |
   section {
     font-family: 'Space Mono', 'Courier New', monospace;
-    color: #000;
+    color: #1A1A1A;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 40px;
+    background-image: radial-gradient(#d1d1d1 1px, transparent 0);
+    background-size: 40px 40px;
   }
   h1 {
     font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 50px;
+    font-size: 55px;
     text-transform: uppercase;
-    background-color: #fff;
-    border: 4px solid #000;
-    padding: 20px 40px;
-    box-shadow: 12px 12px 0px #000;
-    margin-bottom: 30px;
+    color: #E8344A; /* Riso Red */
+    text-shadow: 3px 3px 0px rgba(13, 92, 158, 0.4); /* Riso Blue Ghost */
+    margin-bottom: 20px;
     text-align: center;
+    letter-spacing: 4px;
   }
   h2 {
     font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 35px;
+    font-size: 38px;
     text-transform: uppercase;
-    background-color: #00FFC8; /* Neon Cyan */
-    border: 3px solid #000;
-    padding: 10px 25px;
-    box-shadow: 8px 8px 0px #000;
-    margin-bottom: 20px;
+    color: #0D5C9E; /* Riso Blue */
+    border-bottom: 6px solid #F5D020; /* Riso Yellow */
+    padding-bottom: 5px;
+    margin-bottom: 25px;
     align-self: flex-start;
   }
   h3 {
-    font-family: 'Arial Black', Impact, sans-serif;
-    background-color: #FF2D55; /* Hot Pink */
-    color: #fff;
-    border: 2px solid #000;
+    font-family: 'Space Mono', monospace;
+    color: #E8344A;
+    font-weight: bold;
+    border: 2px solid #E8344A;
     padding: 5px 15px;
-    box-shadow: 5px 5px 0px #000;
     margin-top: 10px;
   }
   table {
-    border: 4px solid #000;
-    background-color: #fff;
-    box-shadow: 10px 10px 0px #000;
     border-collapse: collapse;
     margin: 20px auto;
+    background-color: rgba(245, 208, 32, 0.1); /* Faded Yellow */
   }
   th, td {
-    border: 2px solid #000;
+    border: 1px solid #1A1A1A;
     padding: 12px;
   }
   th {
-    background-color: #CCFF00; /* Lime */
+    background-color: #0D5C9E;
+    color: #fff;
   }
   img {
-    border: 4px solid #000;
-    box-shadow: 10px 10px 0px #000;
+    mix-blend-mode: multiply;
+    filter: contrast(1.1) brightness(0.9) sepia(0.2);
+    border: 1px solid #1A1A1A;
     max-height: 320px;
     margin: 20px auto;
   }
   li {
-    font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
-  blockquote {
-    background-color: #fff;
-    border: 3px solid #000;
-    box-shadow: 6px 6px 0px #000;
-    padding: 15px;
-    margin-top: 20px;
+  strong {
+    color: #E8344A;
   }
   footer {
     font-family: 'Space Mono', monospace;
-    font-weight: bold;
-    color: #000;
+    color: #666;
+  }
+  /* Riso Circles decoration */
+  section::after {
+    content: '';
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background: #E8344A;
+    border-radius: 50%;
+    opacity: 0.6;
+    mix-blend-mode: multiply;
+    box-shadow: -20px 0 0 #0D5C9E, -10px -15px 0 #F5D020;
   }
 ---
 
-<!-- _backgroundColor: #F5F500 -->
+<!-- _backgroundColor: #F7F2E8 -->
 # [EDA] NEMO STORES
-### 강남권 상업 부동산 시장 심층 분석
+### 리소그래프 스타일 분석 보고서
 
 **ANALYST:** 20년 경력 데이터 분석 전문가
 **DATE:** 2026. 04. 29
@@ -95,14 +102,13 @@ style: |
 발표자 노트 (2분):
 안녕하십니까. 오늘 발표를 맡은 데이터 분석 전문가입니다. 
 우리는 오늘 'Nemo Stores'의 상가 매물 데이터 673건을 바탕으로, 대한민국에서 가장 뜨거운 상권인 강남권 상업 부동산 시장의 내밀한 구조를 들여다보고자 합니다. 
+이번 보고서는 아날로그적인 감성과 데이터의 정밀함을 결합한 리소그래프 스타일로 준비했습니다. 
 단순히 가격이 얼마인가를 넘어, 어떤 요인이 이 가격을 결정하고 업종별로 어떤 특이점이 있는지를 데이터로 증명해 보일 것입니다. 
-이번 분석은 20년의 분석 경력을 바탕으로 단순 통계치를 넘어선 비즈니스 인사이트를 제공하는 데 초점을 맞추었습니다. 
-강남이라는 복잡한 생태계를 데이터라는 렌즈로 투명하게 분석한 결과를 지금부터 공유해 드리겠습니다.
+강남이라는 복잡한 생태계를 투명하게 분석한 결과를 지금부터 공유해 드리겠습니다.
 -->
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## 1. 보고서 개요
 
 - **목적:** 강남권 상업 부동산 시장 구조 분석
@@ -119,7 +125,7 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #CCFF00 -->
+<!-- _backgroundColor: #F7F2E8 -->
 ## 2. 데이터 기초 검사
 
 - **TOTAL DATA:** 673건
@@ -136,7 +142,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## 3. 기술 통계 요약
 
 | 통계량 | 보증금 | 월세 | 권리금 |
@@ -159,7 +164,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #FF2D55 -->
 ## 4. 가격 양극화 해석
 
 - **데이터 분산:** 표준편차 > 평균 (불확실성 높음)
@@ -179,7 +183,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## 5. 범주형 변수 요약
 
 - **업종:** '기타업종' (48%) 압도적
@@ -200,7 +203,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #00FFC8 -->
 ## [PLOT 1] 업종 빈도 분석
 ![h:300 center](images/plot_1.png)
 - **INSIGHT:** 복합 비즈니스 상권 입증
@@ -217,7 +219,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## [PLOT 2] 보증금 분포
 ![h:300 center](images/plot_2.png)
 - **INSIGHT:** 4,000만 원 기준 양극화
@@ -234,7 +235,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #F5F500 -->
 ## [PLOT 3] 보증금-월세 상관관계
 ![h:300 center](images/plot_3.png)
 - **INSIGHT:** 상관계수 0.947 (강력)
@@ -253,7 +253,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## [PLOT 4] 업종별 권리금
 ![h:300 center](images/plot_4.png)
 - **INSIGHT:** 주류/휴게음식점 강세
@@ -271,7 +270,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #CCFF00 -->
 ## [PLOT 5] 역세권 영향력
 ![h:300 center](images/plot_5.png)
 - **INSIGHT:** 임대료 상한선 결정 변수
@@ -287,7 +285,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## [PLOT 6] 면적 대비 보증금
 ![h:300 center](images/plot_6.png)
 - **INSIGHT:** 면적보다 '담보 가치' 중시
@@ -303,7 +300,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #FF2D55 -->
 ## [PLOT 7] 계약 유형 분포
 ![h:300 center](images/plot_7.png)
 - **INSIGHT:** '임대' 절대 우위 시장
@@ -320,7 +316,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## [PLOT 8] 매물 인기 지표
 ![h:300 center](images/plot_8.png)
 - **INSIGHT:** 허수 조회수 존재 확인
@@ -338,7 +333,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #00FFC8 -->
 ## [PLOT 9] 층수별 분포
 ![h:300 center](images/plot_9.png)
 - **INSIGHT:** 1층(31%) & 지하(18%) 비중
@@ -355,7 +349,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## [PLOT 10] 핵심 키워드
 ![h:300 center](images/plot_10.png)
 - **INSIGHT:** 위치 기반 키워드 중심
@@ -372,7 +365,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #F5F500 -->
 ## 6. 종합 결론
 
 1. **자본의 논리:** 정교한 가격 형성 시스템 작동
@@ -390,7 +382,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #fff -->
 ## 7. 비즈니스 제언
 
 - **가성비 인덱스** 서비스 런칭
@@ -410,7 +401,6 @@ style: |
 
 ---
 
-<!-- _backgroundColor: #F5F500 -->
 # 감사합니다
 **Q&A 및 추가 분석 문의**
 nemo-data-team@example.com
