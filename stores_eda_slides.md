@@ -6,49 +6,59 @@ header: 'Nemo Stores 상가 매물 데이터 심층 분석'
 footer: '© 2026 Nemo Stores 분석 리포트'
 backgroundColor: #F7F2E8
 style: |
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
   section {
-    font-family: 'Space Mono', 'Courier New', monospace;
+    font-family: 'EB Garamond', serif;
     color: #1A1A1A;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 40px;
-    background-image: radial-gradient(#d1d1d1 1px, transparent 0);
-    background-size: 40px 40px;
+    background-image: radial-gradient(#d1d1d1 0.5px, transparent 0);
+    background-size: 30px 30px;
   }
   h1 {
-    font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 55px;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 70px;
     text-transform: uppercase;
     color: #E8344A; /* Riso Red */
-    text-shadow: 3px 3px 0px rgba(13, 92, 158, 0.4); /* Riso Blue Ghost */
+    text-shadow: 4px 4px 0px rgba(13, 92, 158, 0.3); /* Riso Blue Ghost */
     margin-bottom: 20px;
     text-align: center;
-    letter-spacing: 4px;
+    letter-spacing: 6px;
   }
   h2 {
-    font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 38px;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 45px;
     text-transform: uppercase;
     color: #0D5C9E; /* Riso Blue */
-    border-bottom: 6px solid #F5D020; /* Riso Yellow */
+    border-bottom: 4px solid #F5D020; /* Riso Yellow */
     padding-bottom: 5px;
     margin-bottom: 25px;
     align-self: flex-start;
   }
   h3 {
     font-family: 'Space Mono', monospace;
+    font-size: 24px;
     color: #E8344A;
-    font-weight: bold;
-    border: 2px solid #E8344A;
+    background-color: rgba(232, 52, 74, 0.1);
+    border: 1px solid #E8344A;
     padding: 5px 15px;
     margin-top: 10px;
   }
+  p, li {
+    font-family: 'EB Garamond', serif;
+    font-size: 28px;
+    line-height: 1.4;
+  }
   table {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
     border-collapse: collapse;
     margin: 20px auto;
-    background-color: rgba(245, 208, 32, 0.1); /* Faded Yellow */
+    background-color: rgba(245, 208, 32, 0.05);
   }
   th, td {
     border: 1px solid #1A1A1A;
